@@ -4,14 +4,17 @@ import { Note } from '../types';
 interface Props {
   note: Note;
   onPress: (noteId: string) => void;
+  onLongPress: (noteId: string) => void;
 }
 
-export const NoteItem: React.FC<Props> = ({ note, onPress }) => {
+export const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
   return (
     <Card
       key={note.id}
       style={{ marginBottom: 15 }}
+      selected={note.isSelected}
       onPress={() => onPress(note.id)}
+      onLongPress={() => onLongPress(note.id)}
     >
       <View padding-20>
         {note.title ? (

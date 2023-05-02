@@ -3,6 +3,7 @@ export interface Note {
   title: string;
   text: string;
   createdAt: number;
+  isSelected: boolean
 }
 
 export type NativeStackParams = {
