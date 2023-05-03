@@ -2,6 +2,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
+import { Keyboard } from 'react-native';
 import { Button, Colors, TextField, View } from 'react-native-ui-lib';
 import { useNotes } from '../hooks/useNotes';
 import { NativeStackParams } from '../types';
@@ -22,6 +23,7 @@ export const NoteScreen: React.FC<Props> = ({
 
   const handleSave = () => {
     setIsModified(false);
+    Keyboard.dismiss();
     if (id) {
       if (title || text) {
         store.updateNote(id, title, text);
