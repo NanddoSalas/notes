@@ -1,4 +1,5 @@
 import { MaterialIcons } from '@expo/vector-icons';
+import { useIsFocused } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import * as Haptics from 'expo-haptics';
 import { useEffect } from 'react';
@@ -13,6 +14,7 @@ type Props = NativeStackScreenProps<NativeStackParams, 'Main'>;
 
 export const MainScreen: React.FC<Props> = ({ navigation }) => {
   const store = useNotes();
+  const isFocused = useIsFocused();
 
   const handlePress = (noteId: string) => {
     if (store.selectedNotes.length > 0) {
@@ -109,7 +111,7 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
         contentContainerStyle={{ padding: 15 }}
       />
 
-      <Fab />
+      {isFocused && store.selectedNotes.length === 0 ? <Fab /> : null}
     </View>
   );
 };
