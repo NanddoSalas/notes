@@ -9,11 +9,13 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "1.17.11",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "expo": "~48.0.15",
     "expo-crypto": "~12.2.1",
     "expo-haptics": "~12.2.1",
+    "expo-splash-screen": "~0.18.2",
     "expo-standard-web-crypto": "^1.5.0",
     "expo-status-bar": "~1.4.4",
     "nanoid": "^4.0.2",
