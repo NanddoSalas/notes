@@ -27,11 +27,21 @@ export const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
           </Text>
         ) : null}
 
-        {note.title && note.text ? (
-          <Text text70 $textDefault>
-            {note.text.split('\n')[0]}
+        {note.title ? (
+          note.text ? (
+            <Text text70 $textDefault>
+              {note.text.split('\n')[0]}
+            </Text>
+          ) : (
+            <Text text70 $textDefault color="gray">
+              Empty Note
+            </Text>
+          )
+        ) : (
+          <Text text70 $textDefault color="gray">
+            No Title
           </Text>
-        ) : null}
+        )}
       </View>
     </Card>
   );
