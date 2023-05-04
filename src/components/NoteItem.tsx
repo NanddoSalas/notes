@@ -32,10 +32,6 @@ export const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
             {note.text.split('\n')[0]}
           </Text>
         ) : null}
-
-        <Text text90 $textDefault>
-          {note.createdAt}
-        </Text>
       </View>
     </Card>
   );

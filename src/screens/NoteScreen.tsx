@@ -34,7 +34,6 @@ export const NoteScreen: React.FC<Props> = ({
       const newId = nanoid(10);
       store.addNote({
         id: newId,
-        createdAt: Date.now(),
         isSelected: false,
         title,
         text,
