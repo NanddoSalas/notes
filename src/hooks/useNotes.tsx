@@ -28,7 +28,7 @@ export const useNotes = create<NotesStore>()(
           _hasHydrated: value,
         });
       },
-      addNote: (note) => set((state) => ({ notes: [...state.notes, note] })),
+      addNote: (note) => set((state) => ({ notes: [note, ...state.notes] })),
       updateNote: (noteId, title, text) =>
         set((state) => ({
           notes: state.notes.map((item) => {

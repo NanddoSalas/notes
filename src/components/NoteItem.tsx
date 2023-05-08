@@ -8,6 +8,8 @@ interface Props {
 }
 
 export const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
+  const date = new Date(note.createdAt).toLocaleString();
+
   return (
     <Card
       key={note.id}
@@ -27,21 +29,15 @@ export const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
           </Text>
         ) : null}
 
-        {note.title ? (
-          note.text ? (
-            <Text text70 $textDefault>
-              {note.text.split('\n')[0]}
-            </Text>
-          ) : (
-            <Text text70 $textDefault color="gray">
-              Empty Note
-            </Text>
-          )
-        ) : (
-          <Text text70 $textDefault color="gray">
-            No Title
+        {note.title && note.text ? (
+          <Text text70 $textDefault>
+            {note.text.split('\n')[0]}
           </Text>
-        )}
+        ) : null}
+
+        <Text text90 $textDefault>
+          {date}
+        </Text>
       </View>
     </Card>
   );

@@ -37,6 +37,7 @@ export const NoteScreen: React.FC<Props> = ({
         isSelected: false,
         title,
         text,
+        createdAt: Date.now(),
       });
       setId(newId);
     }
