@@ -1,4 +1,5 @@
-import { Card, Text, View } from 'react-native-ui-lib';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Card, Colors, Text, View } from 'react-native-ui-lib';
 import { Note } from '../types';
 
 interface Props {
@@ -37,6 +38,9 @@ export const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
 
         <Text text90 $textDefault>
           {date}
+          {note.isPinned && (
+            <MaterialCommunityIcons name="pin" color={Colors.$iconPrimary} />
+          )}
         </Text>
       </View>
     </Card>

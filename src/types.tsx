@@ -4,6 +4,7 @@ export interface Note {
   text: string;
   isSelected: boolean;
   createdAt: number;
+  isPinned: boolean;
 }
 
 export type NativeStackParams = {

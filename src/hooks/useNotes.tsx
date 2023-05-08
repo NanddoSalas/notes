@@ -15,6 +15,8 @@ interface NotesStore {
   handleSelection: (noteId: string) => void;
   deselectNotes: () => void;
   deleteSelectedNotes: () => void;
+  pinNotes: () => void;
+  unpinNotes: () => void;
 }
 
 export const useNotes = create<NotesStore>()(
@@ -83,6 +85,26 @@ export const useNotes = create<NotesStore>()(
           ...store,
           selectedNotes: [],
           notes: store.notes.filter((note) => !note.isSelected),
+        })),
+      pinNotes: () =>
+        set((store) => ({
+          ...store,
+          selectedNotes: [],
+          notes: store.notes.map((note) =>
+            note.isSelected
+              ? { ...note, isSelected: false, isPinned: true }
+              : note,
+          ),
+        })),
+      unpinNotes: () =>
+        set((store) => ({
+          ...store,
+          selectedNotes: [],
+          notes: store.notes.map((note) =>
+            note.isSelected
+              ? { ...note, isSelected: false, isPinned: false }
+              : note,
+          ),
         })),
     }),
     {

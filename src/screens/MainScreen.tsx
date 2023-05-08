@@ -74,21 +74,40 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
         layout={Layout}
         style={{}}
       >
-        {store.notes.map((note) => (
-          <Animated.View
-            key={note.id}
-            entering={FadeIn}
-            exiting={FadeOut}
-            layout={SequencedTransition}
-            style={{ zIndex: 5 }}
-          >
-            <NoteItem
-              note={note}
-              onPress={handlePress}
-              onLongPress={handleLongPress}
-            />
-          </Animated.View>
-        ))}
+        {store.notes
+          .filter(({ isPinned }) => isPinned)
+          .map((note) => (
+            <Animated.View
+              key={note.id}
+              entering={FadeIn}
+              exiting={FadeOut}
+              layout={SequencedTransition}
+              style={{ zIndex: 5 }}
+            >
+              <NoteItem
+                note={note}
+                onPress={handlePress}
+                onLongPress={handleLongPress}
+              />
+            </Animated.View>
+          ))}
+        {store.notes
+          .filter(({ isPinned }) => !isPinned)
+          .map((note) => (
+            <Animated.View
+              key={note.id}
+              entering={FadeIn}
+              exiting={FadeOut}
+              layout={SequencedTransition}
+              style={{ zIndex: 5 }}
+            >
+              <NoteItem
+                note={note}
+                onPress={handlePress}
+                onLongPress={handleLongPress}
+              />
+            </Animated.View>
+          ))}
       </Animated.ScrollView>
 
       {isFocused && store.selectedNotes.length === 0 ? <Fab /> : null}
@@ -96,7 +115,11 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
       <ActionSheet
         visible={isVisible}
         onDismiss={toggleActionSheet}
-        options={[{ label: 'Delete', onPress: store.deleteSelectedNotes }]}
+        options={[
+          { label: 'Pin', onPress: store.pinNotes },
+          { label: 'Unpin', onPress: store.unpinNotes },
+          { label: 'Delete', onPress: store.deleteSelectedNotes },
+        ]}
       />
     </View>
   );
