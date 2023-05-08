@@ -1,9 +1,9 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
 import { Keyboard } from 'react-native';
-import { Button, Colors, TextField, View } from 'react-native-ui-lib';
+import { TextField, View } from 'react-native-ui-lib';
+import { CheckButton } from '../components/header/CheckButton';
 import { useNotes } from '../hooks/useNotes';
 import { NativeStackParams } from '../types';
 
@@ -55,17 +55,7 @@ export const NoteScreen: React.FC<Props> = ({
   useEffect(() => {
     if (isModified) {
       navigation.setOptions({
-        headerRight: () => (
-          <Button
-            size={Button.sizes.medium}
-            backgroundColor={Colors.red30}
-            onPress={handleSave}
-            iconSource={() => (
-              <MaterialIcons name="check" size={24} color="black" />
-            )}
-            link
-          />
-        ),
+        headerRight: () => <CheckButton onPress={handleSave} />,
       });
     } else {
       navigation.setOptions({

@@ -1,4 +1,3 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import { useIsFocused } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import * as Haptics from 'expo-haptics';
@@ -9,9 +8,11 @@ import Animated, {
   Layout,
   SequencedTransition,
 } from 'react-native-reanimated';
-import { Button, Colors, View } from 'react-native-ui-lib';
+import { View } from 'react-native-ui-lib';
 import { Fab } from '../components/Fab';
 import { NoteItem } from '../components/NoteItem';
+import { CloseButton } from '../components/header/CloseButton';
+import { DeleteButton } from '../components/header/DeleteButton';
 import { useNotes } from '../hooks/useNotes';
 import { NativeStackParams } from '../types';
 
@@ -37,59 +38,18 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
 
   useEffect(() => {
     const selectedNotesCount = store.selectedNotes.length;
-    // const selectedNotesCount = 1;
 
     if (selectedNotesCount === 1) {
       navigation.setOptions({
         headerTitle: '1 Selected Note',
-        headerLeft: () => (
-          <Button
-            size={Button.sizes.medium}
-            backgroundColor={Colors.red30}
-            onPress={store.deselectNotes}
-            iconSource={() => (
-              <MaterialIcons name="close" size={24} color="black" />
-            )}
-            link
-          />
-        ),
-        headerRight: () => (
-          <Button
-            size={Button.sizes.medium}
-            backgroundColor={Colors.red30}
-            onPress={store.deleteSelectedNotes}
-            iconSource={() => (
-              <MaterialIcons name="delete" size={24} color="black" />
-            )}
-            link
-          />
-        ),
+        headerLeft: () => <CloseButton onPress={store.deselectNotes} />,
+        headerRight: () => <DeleteButton onPress={store.deleteSelectedNotes} />,
       });
     } else if (selectedNotesCount > 1) {
       navigation.setOptions({
         headerTitle: `${selectedNotesCount} Selected Notes`,
-        headerLeft: () => (
-          <Button
-            size={Button.sizes.medium}
-            backgroundColor={Colors.red30}
-            onPress={store.deselectNotes}
-            iconSource={() => (
-              <MaterialIcons name="close" size={24} color="black" />
-            )}
-            link
-          />
-        ),
-        headerRight: () => (
-          <Button
-            size={Button.sizes.medium}
-            backgroundColor={Colors.red30}
-            onPress={store.deleteSelectedNotes}
-            iconSource={() => (
-              <MaterialIcons name="delete" size={24} color="black" />
-            )}
-            link
-          />
-        ),
+        headerLeft: () => <CloseButton onPress={store.deselectNotes} />,
+        headerRight: () => <DeleteButton onPress={store.deleteSelectedNotes} />,
       });
     } else {
       navigation.setOptions({

@@ -16,6 +16,7 @@ export const Fab = () => {
       height={64}
       style={{ position: 'absolute', zIndex: 5, bottom: 16, right: 16 }}
       reanimated
+      // @ts-ignore
       entering={ZoomIn}
       exiting={ZoomOut}
     >
