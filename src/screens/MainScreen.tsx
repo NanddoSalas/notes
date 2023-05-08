@@ -1,18 +1,18 @@
 import { useIsFocused } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import * as Haptics from 'expo-haptics';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Animated, {
   FadeIn,
   FadeOut,
   Layout,
   SequencedTransition,
 } from 'react-native-reanimated';
-import { View } from 'react-native-ui-lib';
+import { ActionSheet, View } from 'react-native-ui-lib';
 import { Fab } from '../components/Fab';
 import { NoteItem } from '../components/NoteItem';
 import { CloseButton } from '../components/header/CloseButton';
-import { DeleteButton } from '../components/header/DeleteButton';
+import { MoreVertButton } from '../components/header/MoreVertButton';
 import { useNotes } from '../hooks/useNotes';
 import { NativeStackParams } from '../types';
 
@@ -21,6 +21,7 @@ type Props = NativeStackScreenProps<NativeStackParams, 'Main'>;
 export const MainScreen: React.FC<Props> = ({ navigation }) => {
   const store = useNotes();
   const isFocused = useIsFocused();
+  const [isVisible, setIsVisible] = useState(false);
 
   const handlePress = (noteId: string) => {
     if (store.selectedNotes.length > 0) {
@@ -36,6 +37,8 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
     Haptics.selectionAsync();
   };
 
+  const toggleActionSheet = () => setIsVisible((current) => !current);
+
   useEffect(() => {
     const selectedNotesCount = store.selectedNotes.length;
 
@@ -43,13 +46,13 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
       navigation.setOptions({
         headerTitle: '1 Selected Note',
         headerLeft: () => <CloseButton onPress={store.deselectNotes} />,
-        headerRight: () => <DeleteButton onPress={store.deleteSelectedNotes} />,
+        headerRight: () => <MoreVertButton onPress={toggleActionSheet} />,
       });
     } else if (selectedNotesCount > 1) {
       navigation.setOptions({
         headerTitle: `${selectedNotesCount} Selected Notes`,
         headerLeft: () => <CloseButton onPress={store.deselectNotes} />,
-        headerRight: () => <DeleteButton onPress={store.deleteSelectedNotes} />,
+        headerRight: () => <MoreVertButton onPress={toggleActionSheet} />,
       });
     } else {
       navigation.setOptions({
@@ -89,6 +92,12 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
       </Animated.ScrollView>
 
       {isFocused && store.selectedNotes.length === 0 ? <Fab /> : null}
+
+      <ActionSheet
+        visible={isVisible}
+        onDismiss={toggleActionSheet}
+        options={[{ label: 'Delete', onPress: store.deleteSelectedNotes }]}
+      />
     </View>
   );
 };
