@@ -13,6 +13,7 @@ import { Fab } from '../components/Fab';
 import { NoteItem } from '../components/NoteItem';
 import { CloseButton } from '../components/header/CloseButton';
 import { MoreVertButton } from '../components/header/MoreVertButton';
+import { SettingsButton } from '../components/header/SettingsButton copy';
 import { useNotes } from '../hooks/useNotes';
 import { NativeStackParams } from '../types';
 
@@ -59,7 +60,9 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
         headerTitle: '',
         headerTitleAlign: 'center',
         headerLeft: undefined,
-        headerRight: undefined,
+        headerRight: () => (
+          <SettingsButton onPress={() => navigation.navigate('Settings')} />
+        ),
       });
     }
   }, [store]);

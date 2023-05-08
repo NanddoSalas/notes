@@ -10,4 +10,5 @@ export interface Note {
 export type NativeStackParams = {
   Main: undefined;
   Note: { noteId: string };
+  Settings: undefined;
 };
