@@ -3,7 +3,12 @@ import { useIsFocused } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import * as Haptics from 'expo-haptics';
 import { useEffect } from 'react';
-import { FlatList } from 'react-native-gesture-handler';
+import Animated, {
+  FadeIn,
+  FadeOut,
+  Layout,
+  SequencedTransition,
+} from 'react-native-reanimated';
 import { Button, Colors, View } from 'react-native-ui-lib';
 import { Fab } from '../components/Fab';
 import { NoteItem } from '../components/NoteItem';
@@ -98,18 +103,30 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <View flex>
-      <FlatList
-        data={store.notes}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <NoteItem
-            note={item}
-            onPress={handlePress}
-            onLongPress={handleLongPress}
-          />
-        )}
-        contentContainerStyle={{ padding: 15 }}
-      />
+      <Animated.ScrollView
+        contentContainerStyle={{
+          padding: 15,
+          flexGrow: 1,
+        }}
+        layout={Layout}
+        style={{}}
+      >
+        {store.notes.map((note) => (
+          <Animated.View
+            key={note.id}
+            entering={FadeIn}
+            exiting={FadeOut}
+            layout={SequencedTransition}
+            style={{ zIndex: 5 }}
+          >
+            <NoteItem
+              note={note}
+              onPress={handlePress}
+              onLongPress={handleLongPress}
+            />
+          </Animated.View>
+        ))}
+      </Animated.ScrollView>
 
       {isFocused && store.selectedNotes.length === 0 ? <Fab /> : null}
     </View>
