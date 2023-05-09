@@ -1,4 +1,5 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React from 'react';
 import { Card, Colors, Text, View } from 'react-native-ui-lib';
 import { Note } from '../types';
 
@@ -8,7 +9,7 @@ interface Props {
   onLongPress: (noteId: string) => void;
 }
 
-export const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
+const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
   const date = new Date(note.createdAt).toLocaleString();
 
   return (
@@ -46,3 +47,5 @@ export const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
     </Card>
   );
 };
+
+export default React.memo(NoteItem);

@@ -3,13 +3,13 @@ import * as SplashScreen from 'expo-splash-screen';
 import { polyfillWebCrypto } from 'expo-standard-web-crypto';
 import { useEffect } from 'react';
 import { Navigation } from './src/Navigation';
-import { useNotes } from './src/hooks/useNotes';
+import { useStore } from './src/hooks/useStore';
 
 polyfillWebCrypto();
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const hasHydrated = useNotes((state) => state._hasHydrated);
+  const hasHydrated = useStore((state) => state._hasHydrated);
 
   useEffect(() => {
     if (hasHydrated) {

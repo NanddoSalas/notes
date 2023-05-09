@@ -3,10 +3,13 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { Note } from '../types';
 
-interface NotesStore {
+type State = {
   _hasHydrated: boolean;
   notes: Note[];
   selectedNotes: string[];
+};
+
+type Actions = {
   setHasHydrated: (value: boolean) => void;
   addNote: (note: Note) => void;
   updateNote: (noteId: string, title: string, text: string) => void;
@@ -17,20 +20,27 @@ interface NotesStore {
   deleteSelectedNotes: () => void;
   pinNotes: () => void;
   unpinNotes: () => void;
-}
+};
 
-export const useNotes = create<NotesStore>()(
+const initialState: State = {
+  _hasHydrated: false,
+  notes: [],
+  selectedNotes: [],
+};
+
+export const useStore = create<State & Actions>()(
   persist(
     (set, get) => ({
-      _hasHydrated: false,
-      notes: [],
-      selectedNotes: [],
+      ...initialState,
+
       setHasHydrated: (value) => {
         set({
           _hasHydrated: value,
         });
       },
+
       addNote: (note) => set((state) => ({ notes: [note, ...state.notes] })),
+
       updateNote: (noteId, title, text) =>
         set((state) => ({
           notes: state.notes.map((item) => {
@@ -41,11 +51,14 @@ export const useNotes = create<NotesStore>()(
             return item;
           }),
         })),
+
       deleteNote: (noteId) =>
         set((state) => ({
           notes: state.notes.filter((item) => item.id !== noteId),
         })),
+
       getNote: (noteId) => get().notes.find((item) => item.id === noteId),
+
       handleSelection: (noteId) =>
         set((state) => {
           const isSelected = state.selectedNotes.find(
@@ -74,18 +87,21 @@ export const useNotes = create<NotesStore>()(
             ),
           };
         }),
+
       deselectNotes: () =>
         set((store) => ({
           ...store,
           selectedNotes: [],
           notes: store.notes.map((note) => ({ ...note, isSelected: false })),
         })),
+
       deleteSelectedNotes: () =>
         set((store) => ({
           ...store,
           selectedNotes: [],
           notes: store.notes.filter((note) => !note.isSelected),
         })),
+
       pinNotes: () =>
         set((store) => ({
           ...store,
@@ -96,6 +112,7 @@ export const useNotes = create<NotesStore>()(
               : note,
           ),
         })),
+
       unpinNotes: () =>
         set((store) => ({
           ...store,
@@ -107,8 +124,9 @@ export const useNotes = create<NotesStore>()(
           ),
         })),
     }),
+
     {
-      name: 'notes-storage',
+      name: 'store',
       storage: createJSONStorage(() => AsyncStorage),
       onRehydrateStorage: () => (state) => {
         state!.setHasHydrated(true);

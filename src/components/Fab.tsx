@@ -1,14 +1,21 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { ZoomIn, ZoomOut } from 'react-native-reanimated';
 import { Button, View } from 'react-native-ui-lib';
+import { useStore } from '../hooks/useStore';
 import { NativeStackParams } from '../types';
 
 export const Fab = () => {
+  const isFocused = useIsFocused();
+  const selectedNotes = useStore((state) => state.selectedNotes);
   const navigation =
     useNavigation<NativeStackNavigationProp<NativeStackParams, 'Note'>>();
+
+  if (!isFocused) return null;
+
+  if (selectedNotes.length !== 0) return null;
 
   return (
     <View

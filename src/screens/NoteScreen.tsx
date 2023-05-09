@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Keyboard } from 'react-native';
 import { TextField, View } from 'react-native-ui-lib';
 import { CheckButton } from '../components/header/CheckButton';
-import { useNotes } from '../hooks/useNotes';
+import { useStore } from '../hooks/useStore';
 import { NativeStackParams } from '../types';
 
 type Props = NativeStackScreenProps<NativeStackParams, 'Note'>;
@@ -15,29 +15,34 @@ export const NoteScreen: React.FC<Props> = ({
   },
   navigation,
 }) => {
-  const store = useNotes();
   const [id, setId] = useState('');
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [isModified, setIsModified] = useState(false);
+
+  const addNote = useStore((state) => state.addNote);
+  const updateNote = useStore((state) => state.updateNote);
+  const deleteNote = useStore((state) => state.deleteNote);
+  const getNote = useStore((state) => state.getNote);
 
   const handleSave = () => {
     setIsModified(false);
     Keyboard.dismiss();
     if (id) {
       if (title || text) {
-        store.updateNote(id, title, text);
+        updateNote(id, title, text);
       } else {
-        store.deleteNote(id);
+        deleteNote(id);
       }
     } else if (title || text) {
       const newId = nanoid(10);
-      store.addNote({
+      addNote({
         id: newId,
         isSelected: false,
         title,
         text,
         createdAt: Date.now(),
+        isPinned: false,
       });
       setId(newId);
     }
@@ -66,7 +71,7 @@ export const NoteScreen: React.FC<Props> = ({
   }, [navigation, isModified, handleSave]);
 
   useEffect(() => {
-    const note = store.getNote(noteId);
+    const note = getNote(noteId);
 
     if (note) {
       setId(note.id);
