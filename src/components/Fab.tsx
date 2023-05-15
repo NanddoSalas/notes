@@ -9,13 +9,13 @@ import { NativeStackParams } from '../types';
 
 export const Fab = () => {
   const isFocused = useIsFocused();
-  const selectedNotes = useStore((state) => state.selectedNotes);
+  const selectedNotesCount = useStore((state) => state.selectedNotesCount);
   const navigation =
     useNavigation<NativeStackNavigationProp<NativeStackParams, 'Note'>>();
 
   if (!isFocused) return null;
 
-  if (selectedNotes.length !== 0) return null;
+  if (selectedNotesCount > 0) return null;
 
   return (
     <View

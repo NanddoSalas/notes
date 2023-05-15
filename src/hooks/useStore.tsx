@@ -6,7 +6,7 @@ import { Note } from '../types';
 type State = {
   _hasHydrated: boolean;
   notes: Note[];
-  selectedNotes: string[];
+  selectedNotesCount: number;
 };
 
 type Actions = {
@@ -25,7 +25,7 @@ type Actions = {
 const initialState: State = {
   _hasHydrated: false,
   notes: [],
-  selectedNotes: [],
+  selectedNotesCount: 0,
 };
 
 export const useStore = create<State & Actions>()(
@@ -61,16 +61,13 @@ export const useStore = create<State & Actions>()(
 
       handleSelection: (noteId) =>
         set((state) => {
-          const isSelected = state.selectedNotes.find(
-            (item) => item === noteId,
+          const isSelected = state.notes.find(
+            (note) => note.id === noteId && note.isSelected,
           );
 
           if (isSelected) {
             return {
-              ...state,
-              selectedNotes: state.selectedNotes.filter(
-                (item) => item !== noteId,
-              ),
+              selectedNotesCount: state.selectedNotesCount - 1,
               notes: state.notes.map((note) =>
                 note.id === noteId
                   ? { ...note, isSelected: !isSelected }
@@ -80,8 +77,7 @@ export const useStore = create<State & Actions>()(
           }
 
           return {
-            ...state,
-            selectedNotes: [...state.selectedNotes, noteId],
+            selectedNotesCount: state.selectedNotesCount + 1,
             notes: state.notes.map((note) =>
               note.id === noteId ? { ...note, isSelected: !isSelected } : note,
             ),
@@ -89,24 +85,21 @@ export const useStore = create<State & Actions>()(
         }),
 
       deselectNotes: () =>
-        set((store) => ({
-          ...store,
-          selectedNotes: [],
-          notes: store.notes.map((note) => ({ ...note, isSelected: false })),
+        set((state) => ({
+          selectedNotesCount: 0,
+          notes: state.notes.map((note) => ({ ...note, isSelected: false })),
         })),
 
       deleteSelectedNotes: () =>
-        set((store) => ({
-          ...store,
-          selectedNotes: [],
-          notes: store.notes.filter((note) => !note.isSelected),
+        set((state) => ({
+          selectedNotesCount: 0,
+          notes: state.notes.filter((note) => !note.isSelected),
         })),
 
       pinNotes: () =>
-        set((store) => ({
-          ...store,
-          selectedNotes: [],
-          notes: store.notes.map((note) =>
+        set((state) => ({
+          selectedNotesCount: 0,
+          notes: state.notes.map((note) =>
             note.isSelected
               ? { ...note, isSelected: false, isPinned: true }
               : note,
@@ -114,10 +107,9 @@ export const useStore = create<State & Actions>()(
         })),
 
       unpinNotes: () =>
-        set((store) => ({
-          ...store,
-          selectedNotes: [],
-          notes: store.notes.map((note) =>
+        set((state) => ({
+          selectedNotesCount: 0,
+          notes: state.notes.map((note) =>
             note.isSelected
               ? { ...note, isSelected: false, isPinned: false }
               : note,

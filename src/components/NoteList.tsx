@@ -14,13 +14,13 @@ import NoteItem from './NoteItem';
 export const NoteList = () => {
   const notes = useStore((state) => state.notes);
   const handleSelection = useStore((state) => state.handleSelection);
-  const selectedNotes = useStore((state) => state.selectedNotes);
+  const selectedNotesCount = useStore((state) => state.selectedNotesCount);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<NativeStackParams, 'Main'>>();
 
   const handlePress = (noteId: string) => {
-    if (selectedNotes.length > 0) {
+    if (selectedNotesCount > 0) {
       handleSelection(noteId);
       Haptics.selectionAsync();
     } else {

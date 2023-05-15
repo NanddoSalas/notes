@@ -14,14 +14,12 @@ type Props = NativeStackScreenProps<NativeStackParams, 'Main'>;
 
 export const MainScreen: React.FC<Props> = ({ navigation }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const selectedNotes = useStore((state) => state.selectedNotes);
+  const selectedNotesCount = useStore((state) => state.selectedNotesCount);
   const deselectNotes = useStore((state) => state.deselectNotes);
 
   const toggleActionSheet = () => setIsVisible((current) => !current);
 
   useEffect(() => {
-    const selectedNotesCount = selectedNotes.length;
-
     if (selectedNotesCount === 1) {
       navigation.setOptions({
         headerTitle: '1 Selected Note',
@@ -44,7 +42,7 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
         ),
       });
     }
-  }, [selectedNotes, deselectNotes]);
+  }, [selectedNotesCount, deselectNotes]);
 
   return (
     <View flex>
