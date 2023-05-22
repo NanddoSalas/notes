@@ -1,3 +1,4 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import * as Haptics from 'expo-haptics';
@@ -7,6 +8,7 @@ import Animated, {
   Layout,
   SequencedTransition,
 } from 'react-native-reanimated';
+import { Colors, Text } from 'react-native-ui-lib';
 import { useStore } from '../hooks/useStore';
 import { NativeStackParams } from '../types';
 import NoteItem from './NoteItem';
@@ -42,6 +44,28 @@ export const NoteList = () => {
       layout={Layout}
       style={{}}
     >
+      {notes.length === 0 && (
+        <Animated.View
+          style={{
+            display: 'flex',
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          entering={FadeIn}
+        >
+          <MaterialCommunityIcons
+            name="notebook-edit"
+            size={72}
+            color={Colors.$textPrimary}
+            style={{ opacity: 0.5 }}
+          />
+          <Text text60 color="gray">
+            No notes here yet
+          </Text>
+        </Animated.View>
+      )}
+
       {notes
         .filter(({ isPinned }) => isPinned)
         .map((note) => (
