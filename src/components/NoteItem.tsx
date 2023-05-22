@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
 import { Card, Colors, Text, View } from 'react-native-ui-lib';
+import { useStore } from '../hooks/useStore';
 import { Note } from '../types';
 
 interface Props {
@@ -10,7 +11,10 @@ interface Props {
 }
 
 const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
-  const date = new Date(note.createdAt).toLocaleString();
+  const sortNotesBy = useStore((state) => state.sortNotesBy);
+  const date =
+    sortNotesBy === 'CREATION_DATE' ? note.createdAt : note.updatedAt;
+  const dateString = new Date(date).toLocaleString();
 
   return (
     <Card
@@ -38,7 +42,7 @@ const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
         ) : null}
 
         <Text text90 $textDefault>
-          {date}
+          {dateString}
           {note.isPinned && (
             <MaterialCommunityIcons name="pin" color={Colors.$iconPrimary} />
           )}

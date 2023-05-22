@@ -30,19 +30,24 @@ export const NoteScreen: React.FC<Props> = ({
     Keyboard.dismiss();
     if (id) {
       if (title || text) {
-        updateNote(id, title, text);
+        if (isModified) {
+          updateNote(id, title, text);
+        }
       } else {
         deleteNote(id);
       }
     } else if (title || text) {
       const newId = nanoid(10);
+      const newDate = Date.now();
+
       addNote({
         id: newId,
         isSelected: false,
         title,
         text,
-        createdAt: Date.now(),
+        createdAt: newDate,
         isPinned: false,
+        updatedAt: newDate,
       });
       setId(newId);
     }

@@ -5,6 +5,7 @@ export interface Note {
   isSelected: boolean;
   createdAt: number;
   isPinned: boolean;
+  updatedAt: number;
 }
 
 export type NativeStackParams = {
@@ -12,3 +13,5 @@ export type NativeStackParams = {
   Note: { noteId: string };
   Settings: undefined;
 };
+
+export type SortNotesBy = 'CREATION_DATE' | 'UPDATION_DATE';

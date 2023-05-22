@@ -1,12 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import { Note } from '../types';
+import { Note, SortNotesBy } from '../types';
 
 type State = {
   _hasHydrated: boolean;
   notes: Note[];
   selectedNotesCount: number;
+  sortNotesBy: SortNotesBy;
 };
 
 type Actions = {
@@ -20,12 +21,14 @@ type Actions = {
   deleteSelectedNotes: () => void;
   pinNotes: () => void;
   unpinNotes: () => void;
+  toggleSortNotesBy: () => void;
 };
 
 const initialState: State = {
   _hasHydrated: false,
   notes: [],
   selectedNotesCount: 0,
+  sortNotesBy: 'CREATION_DATE',
 };
 
 export const useStore = create<State & Actions>()(
@@ -45,7 +48,7 @@ export const useStore = create<State & Actions>()(
         set((state) => ({
           notes: state.notes.map((item) => {
             if (item.id === noteId) {
-              return { ...item, title, text };
+              return { ...item, title, text, updatedAt: Date.now() };
             }
 
             return item;
@@ -115,6 +118,23 @@ export const useStore = create<State & Actions>()(
               : note,
           ),
         })),
+
+      toggleSortNotesBy: () =>
+        set((state) => {
+          if (state.sortNotesBy === 'CREATION_DATE') {
+            const notes = [...state.notes].sort(
+              (a, b) => b.updatedAt - a.updatedAt,
+            );
+
+            return { sortNotesBy: 'UPDATION_DATE', notes };
+          } else {
+            const notes = [...state.notes].sort(
+              (a, b) => b.createdAt - a.createdAt,
+            );
+
+            return { sortNotesBy: 'CREATION_DATE', notes };
+          }
+        }),
     }),
 
     {
