@@ -1,8 +1,9 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
-import { Keyboard } from 'react-native';
-import { TextField, View } from 'react-native-ui-lib';
+import { Keyboard, Share } from 'react-native';
+import { Button, TextField, View } from 'react-native-ui-lib';
 import { useStore } from '../hooks/useStore';
 import { NativeStackParams } from '../types';
 
@@ -17,12 +18,51 @@ export const NoteScreen: React.FC<Props> = ({
   const [id, setId] = useState('');
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
+  const [isPinned, setIsPinned] = useState(false);
   const [isModified, setIsModified] = useState(false);
 
   const addNote = useStore((state) => state.addNote);
   const updateNote = useStore((state) => state.updateNote);
   const deleteNote = useStore((state) => state.deleteNote);
   const getNote = useStore((state) => state.getNote);
+  const toggleNotePin = useStore((state) => state.toggleNotePin);
+
+  const headerRight = () => (
+    <View
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+      }}
+    >
+      <Button
+        style={{ marginLeft: 15 }}
+        size={Button.sizes.large}
+        onPress={() => {
+          setIsPinned((current) => !current);
+          toggleNotePin(noteId);
+        }}
+        iconSource={() => (
+          <MaterialCommunityIcons
+            name={isPinned ? 'pin' : 'pin-outline'}
+            size={28}
+            color="black"
+          />
+        )}
+        link
+      />
+      <Button
+        style={{ marginLeft: 15 }}
+        size={Button.sizes.large}
+        onPress={() => {
+          Share.share({ message: text });
+        }}
+        iconSource={() => (
+          <MaterialCommunityIcons name="share" size={32} color="black" />
+        )}
+        link
+      />
+    </View>
+  );
 
   const handleSave = () => {
     setIsModified(false);
@@ -63,12 +103,19 @@ export const NoteScreen: React.FC<Props> = ({
   };
 
   useEffect(() => {
+    navigation.setOptions({
+      headerRight,
+    });
+  }, [navigation, headerRight]);
+
+  useEffect(() => {
     const note = getNote(noteId);
 
     if (note) {
       setId(note.id);
       setTitle(note.title);
       setText(note.text);
+      setIsPinned(note.isPinned);
     }
   }, []);
 

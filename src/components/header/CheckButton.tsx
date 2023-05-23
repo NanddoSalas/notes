@@ -11,7 +11,7 @@ export const CheckButton: React.FC<Props> = ({ onPress }) => {
       size={Button.sizes.medium}
       backgroundColor={Colors.red30}
       onPress={onPress}
-      iconSource={() => <MaterialIcons name="check" size={24} color="black" />}
+      iconSource={() => <MaterialIcons name="check" size={36} color="black" />}
       link
     />
   );

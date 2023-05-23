@@ -12,7 +12,7 @@ export const SettingsButton: React.FC<Props> = ({ onPress }) => {
       backgroundColor={Colors.red30}
       onPress={onPress}
       iconSource={() => (
-        <MaterialIcons name="settings" size={24} color="black" />
+        <MaterialIcons name="settings" size={28} color="black" />
       )}
       link
     />

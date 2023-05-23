@@ -22,6 +22,7 @@ type Actions = {
   pinNotes: () => void;
   unpinNotes: () => void;
   toggleSortNotesBy: () => void;
+  toggleNotePin: (noteId: string) => void;
 };
 
 const initialState: State = {
@@ -135,6 +136,13 @@ export const useStore = create<State & Actions>()(
             return { sortNotesBy: 'CREATION_DATE', notes };
           }
         }),
+
+      toggleNotePin: (noteId) =>
+        set((state) => ({
+          notes: state.notes.map((note) =>
+            note.id === noteId ? { ...note, isPinned: !note.isPinned } : note,
+          ),
+        })),
     }),
 
     {
