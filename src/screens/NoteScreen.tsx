@@ -3,7 +3,6 @@ import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
 import { Keyboard } from 'react-native';
 import { TextField, View } from 'react-native-ui-lib';
-import { CheckButton } from '../components/header/CheckButton';
 import { useStore } from '../hooks/useStore';
 import { NativeStackParams } from '../types';
 
@@ -62,18 +61,6 @@ export const NoteScreen: React.FC<Props> = ({
     setText(value);
     setIsModified(true);
   };
-
-  useEffect(() => {
-    if (isModified) {
-      navigation.setOptions({
-        headerRight: () => <CheckButton onPress={handleSave} />,
-      });
-    } else {
-      navigation.setOptions({
-        headerRight: undefined,
-      });
-    }
-  }, [navigation, isModified, handleSave]);
 
   useEffect(() => {
     const note = getNote(noteId);
