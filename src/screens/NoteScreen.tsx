@@ -154,6 +154,13 @@ export const NoteScreen: React.FC<Props> = ({
               Share.share({ message: text });
             },
           },
+          {
+            label: 'Delete',
+            onPress: () => {
+              deleteNote(noteId);
+              navigation.goBack();
+            },
+          },
         ]}
       />
     </View>
