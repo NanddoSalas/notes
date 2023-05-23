@@ -1,9 +1,9 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
 import { Keyboard, Share } from 'react-native';
-import { Button, TextField, View } from 'react-native-ui-lib';
+import { ActionSheet, Button, TextField, View } from 'react-native-ui-lib';
 import { useStore } from '../hooks/useStore';
 import { NativeStackParams } from '../types';
 
@@ -20,6 +20,7 @@ export const NoteScreen: React.FC<Props> = ({
   const [text, setText] = useState('');
   const [isPinned, setIsPinned] = useState(false);
   const [isModified, setIsModified] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   const addNote = useStore((state) => state.addNote);
   const updateNote = useStore((state) => state.updateNote);
@@ -44,20 +45,19 @@ export const NoteScreen: React.FC<Props> = ({
         iconSource={() => (
           <MaterialCommunityIcons
             name={isPinned ? 'pin' : 'pin-outline'}
-            size={28}
+            size={24}
             color="black"
           />
         )}
         link
       />
+
       <Button
         style={{ marginLeft: 15 }}
         size={Button.sizes.large}
-        onPress={() => {
-          Share.share({ message: text });
-        }}
+        onPress={() => setIsVisible(true)}
         iconSource={() => (
-          <MaterialCommunityIcons name="share" size={32} color="black" />
+          <MaterialIcons name="more-vert" size={24} color="black" />
         )}
         link
       />
@@ -142,6 +142,19 @@ export const NoteScreen: React.FC<Props> = ({
         onChangeText={handleChangeText}
         text70
         multiline
+      />
+
+      <ActionSheet
+        visible={isVisible}
+        onDismiss={() => setIsVisible(false)}
+        options={[
+          {
+            label: 'Share',
+            onPress: () => {
+              Share.share({ message: text });
+            },
+          },
+        ]}
       />
     </View>
   );
