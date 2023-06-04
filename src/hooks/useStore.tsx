@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { nanoid } from 'nanoid';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { Note, SortNotesBy } from '../types';
@@ -23,6 +24,7 @@ type Actions = {
   unpinNotes: () => void;
   toggleSortNotesBy: () => void;
   toggleNotePin: (noteId: string) => void;
+  addEmptyNote: () => string;
 };
 
 const initialState: State = {
@@ -143,6 +145,27 @@ export const useStore = create<State & Actions>()(
             note.id === noteId ? { ...note, isPinned: !note.isPinned } : note,
           ),
         })),
+
+      addEmptyNote: () => {
+        const newNoteId = nanoid(10);
+        const date = Date.now();
+
+        const newNote: Note = {
+          id: newNoteId,
+          title: '',
+          text: '',
+          isPinned: false,
+          isSelected: false,
+          createdAt: date,
+          updatedAt: date,
+        };
+
+        set((state) => ({
+          notes: [newNote, ...state.notes],
+        }));
+
+        return newNoteId;
+      },
     }),
 
     {

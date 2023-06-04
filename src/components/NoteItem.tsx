@@ -33,7 +33,11 @@ const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
           <Text text40 $textDefault>
             {note.text.split('\n')[0]}
           </Text>
-        ) : null}
+        ) : (
+          <Text text40 style={{ color: 'gray' }}>
+            Empty Note
+          </Text>
+        )}
 
         {note.title && note.text ? (
           <Text text70 $textDefault>

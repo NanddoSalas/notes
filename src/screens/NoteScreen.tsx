@@ -1,8 +1,7 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
-import { Keyboard, Share } from 'react-native';
+import { Share } from 'react-native';
 import { ActionSheet, Button, TextField, View } from 'react-native-ui-lib';
 import { useStore } from '../hooks/useStore';
 import { NativeStackParams } from '../types';
@@ -15,18 +14,18 @@ export const NoteScreen: React.FC<Props> = ({
   },
   navigation,
 }) => {
-  const [id, setId] = useState('');
+  const [id, setId] = useState(noteId);
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [isPinned, setIsPinned] = useState(false);
-  const [isModified, setIsModified] = useState(false);
+
   const [isVisible, setIsVisible] = useState(false);
 
-  const addNote = useStore((state) => state.addNote);
   const updateNote = useStore((state) => state.updateNote);
   const deleteNote = useStore((state) => state.deleteNote);
   const getNote = useStore((state) => state.getNote);
   const toggleNotePin = useStore((state) => state.toggleNotePin);
+  const addEmptyNote = useStore((state) => state.addEmptyNote);
 
   const headerRight = () => (
     <View
@@ -64,42 +63,12 @@ export const NoteScreen: React.FC<Props> = ({
     </View>
   );
 
-  const handleSave = () => {
-    setIsModified(false);
-    Keyboard.dismiss();
-    if (id) {
-      if (title || text) {
-        if (isModified) {
-          updateNote(id, title, text);
-        }
-      } else {
-        deleteNote(id);
-      }
-    } else if (title || text) {
-      const newId = nanoid(10);
-      const newDate = Date.now();
-
-      addNote({
-        id: newId,
-        isSelected: false,
-        title,
-        text,
-        createdAt: newDate,
-        isPinned: false,
-        updatedAt: newDate,
-      });
-      setId(newId);
-    }
-  };
-
   const handleChangeTitle = (value: string) => {
     setTitle(value);
-    setIsModified(true);
   };
 
   const handleChangeText = (value: string) => {
     setText(value);
-    setIsModified(true);
   };
 
   useEffect(() => {
@@ -116,16 +85,20 @@ export const NoteScreen: React.FC<Props> = ({
       setTitle(note.title);
       setText(note.text);
       setIsPinned(note.isPinned);
+    } else {
+      const newNoteId = addEmptyNote();
+
+      setId(newNoteId);
     }
   }, []);
 
   useEffect(() => {
     return navigation.addListener('beforeRemove', () => {
-      handleSave();
+      updateNote(id, title, text);
 
       return;
     });
-  }, [navigation, handleSave]);
+  }, [navigation, id, title, text]);
 
   return (
     <View padding-15>
