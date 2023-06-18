@@ -6,6 +6,7 @@ export interface Note {
   createdAt: number;
   isPinned: boolean;
   updatedAt: number;
+  images: string[];
 }
 
 export type NativeStackParams = {

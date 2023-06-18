@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as FileSystem from 'expo-file-system';
 import { nanoid } from 'nanoid';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
@@ -24,6 +25,7 @@ type Actions = {
   unpinNotes: () => void;
   toggleSortNotesBy: () => void;
   toggleNotePin: (noteId: string) => void;
+  addImages: (noteId: string, uris: string[]) => void;
   addEmptyNote: () => string;
 };
 
@@ -146,6 +148,29 @@ export const useStore = create<State & Actions>()(
           ),
         })),
 
+      addImages: (noteId, uris) => {
+        const ids: string[] = [];
+
+        uris.map((uri) => {
+          const cut = uri.lastIndexOf('/');
+          const id = uri.substring(cut + 1);
+          ids.push(id);
+
+          FileSystem.copyAsync({
+            from: uri,
+            to: FileSystem.documentDirectory + id,
+          });
+        });
+
+        set((state) => ({
+          notes: state.notes.map((note) =>
+            note.id === noteId
+              ? { ...note, images: [...ids, ...note.images] }
+              : note,
+          ),
+        }));
+      },
+
       addEmptyNote: () => {
         const newNoteId = nanoid(10);
         const date = Date.now();
@@ -158,6 +183,7 @@ export const useStore = create<State & Actions>()(
           isSelected: false,
           createdAt: date,
           updatedAt: date,
+          images: [],
         };
 
         set((state) => ({
