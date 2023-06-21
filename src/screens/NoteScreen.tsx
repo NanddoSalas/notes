@@ -230,10 +230,6 @@ export const NoteScreen: React.FC<Props> = ({
                     label: 'Add image',
                     onPress: handleAddImage,
                   },
-                  {
-                    label: 'images',
-                    onPress: () => setImageIndex(0),
-                  },
                 ]
           }
         />

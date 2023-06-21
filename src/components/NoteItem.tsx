@@ -1,4 +1,5 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import * as FileSystem from 'expo-file-system';
 import React from 'react';
 import { Card, Colors, Text, View } from 'react-native-ui-lib';
 import { useStore } from '../hooks/useStore';
@@ -15,6 +16,10 @@ const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
   const date =
     sortNotesBy === 'CREATION_DATE' ? note.createdAt : note.updatedAt;
   const dateString = new Date(date).toLocaleString();
+  const image =
+    note.images[0] !== undefined
+      ? FileSystem.documentDirectory + note.images[0]
+      : '';
 
   return (
     <Card
@@ -24,33 +29,51 @@ const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
       onPress={() => onPress(note.id)}
       onLongPress={() => onLongPress(note.id)}
     >
-      <View padding-20>
-        {note.title ? (
-          <Text text40 $textDefault>
-            {note.title}
-          </Text>
-        ) : note.text ? (
-          <Text text40 $textDefault>
-            {note.text.split('\n')[0]}
-          </Text>
-        ) : (
-          <Text text40 style={{ color: 'gray' }}>
-            Empty Note
-          </Text>
-        )}
-
-        {note.title && note.text ? (
-          <Text text70 $textDefault>
-            {note.text.split('\n')[0]}
-          </Text>
-        ) : null}
-
-        <Text text90 $textDefault>
-          {dateString}
-          {note.isPinned && (
-            <MaterialCommunityIcons name="pin" color={Colors.$iconPrimary} />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}
+      >
+        <View padding-20>
+          {note.title ? (
+            <Text text40 $textDefault>
+              {note.title}
+            </Text>
+          ) : note.text ? (
+            <Text text40 $textDefault>
+              {note.text.split('\n')[0]}
+            </Text>
+          ) : (
+            <Text text40 style={{ color: 'gray' }}>
+              Empty Note
+            </Text>
           )}
-        </Text>
+
+          {note.title && note.text ? (
+            <Text text70 $textDefault>
+              {note.text.split('\n')[0]}
+            </Text>
+          ) : null}
+
+          <Text text90 $textDefault>
+            {dateString}
+            {note.isPinned && (
+              <MaterialCommunityIcons name="pin" color={Colors.$iconPrimary} />
+            )}
+          </Text>
+        </View>
+
+        {image && (
+          <Card.Section
+            imageSource={{ uri: image }}
+            imageStyle={{ width: 128, flex: 1 }}
+            style={{
+              borderTopLeftRadius: 0,
+              borderBottomLeftRadius: 0,
+            }}
+          />
+        )}
       </View>
     </Card>
   );
