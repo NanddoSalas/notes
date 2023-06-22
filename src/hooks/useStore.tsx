@@ -3,7 +3,7 @@ import * as FileSystem from 'expo-file-system';
 import { nanoid } from 'nanoid';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import { Note, SortNotesBy } from '../types';
+import { Asset, Note, SortNotesBy } from '../types';
 
 type State = {
   _hasHydrated: boolean;
@@ -25,7 +25,7 @@ type Actions = {
   unpinNotes: () => void;
   toggleSortNotesBy: () => void;
   toggleNotePin: (noteId: string) => void;
-  addImages: (noteId: string, uris: string[]) => void;
+  addAssets: (noteId: string, assets: Asset[]) => void;
   addEmptyNote: () => string;
 };
 
@@ -62,7 +62,15 @@ export const useStore = create<State & Actions>()(
 
       deleteNote: (noteId) =>
         set((state) => ({
-          notes: state.notes.filter((item) => item.id !== noteId),
+          notes: state.notes.filter((item) => {
+            if (item.id !== noteId) return true;
+
+            item.assets.map((asset) => {
+              FileSystem.deleteAsync(asset.uri, { idempotent: true });
+            });
+
+            return false;
+          }),
         })),
 
       getNote: (noteId) => get().notes.find((item) => item.id === noteId),
@@ -148,16 +156,16 @@ export const useStore = create<State & Actions>()(
           ),
         })),
 
-      addImages: (noteId, uris) => {
+      addAssets: (noteId, assets) => {
         const ids: string[] = [];
 
-        uris.map((uri) => {
-          const cut = uri.lastIndexOf('/');
-          const id = uri.substring(cut + 1);
+        assets.map((asset) => {
+          const cut = asset.uri.lastIndexOf('/');
+          const id = asset.uri.substring(cut + 1);
           ids.push(id);
 
           FileSystem.copyAsync({
-            from: uri,
+            from: asset.uri,
             to: FileSystem.documentDirectory + id,
           });
         });
@@ -165,7 +173,16 @@ export const useStore = create<State & Actions>()(
         set((state) => ({
           notes: state.notes.map((note) =>
             note.id === noteId
-              ? { ...note, images: [...ids, ...note.images] }
+              ? {
+                  ...note,
+                  assets: [
+                    ...assets.map((asset, index) => ({
+                      ...asset,
+                      uri: FileSystem.documentDirectory + ids[index],
+                    })),
+                    ...note.assets,
+                  ],
+                }
               : note,
           ),
         }));
@@ -183,7 +200,7 @@ export const useStore = create<State & Actions>()(
           isSelected: false,
           createdAt: date,
           updatedAt: date,
-          images: [],
+          assets: [],
         };
 
         set((state) => ({

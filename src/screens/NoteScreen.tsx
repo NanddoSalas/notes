@@ -4,16 +4,16 @@ import {
   Octicons,
 } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import * as FileSystem from 'expo-file-system';
-import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
+import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
-import { Share, Text } from 'react-native';
+import { Share } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import ImageView from 'react-native-image-viewing';
-import { ImageSource } from 'react-native-image-viewing/dist/@types';
 import { ActionSheet, Button, TextField, View } from 'react-native-ui-lib';
+import { NoteAsset } from '../components/NoteAsset';
 import { useStore } from '../hooks/useStore';
-import { NativeStackParams } from '../types';
+import { Asset, NativeStackParams } from '../types';
 
 type Props = NativeStackScreenProps<NativeStackParams, 'Note'>;
 
@@ -27,20 +27,16 @@ export const NoteScreen: React.FC<Props> = ({
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [isPinned, setIsPinned] = useState(false);
-  const [images, setImages] = useState<string[]>([]);
+  const [assets, setAssets] = useState<Asset[]>([]);
   const [actionSheetIndex, setActionSheetIndex] = useState(0);
-  const [imageIndex, setImageIndex] = useState(-1);
+  const [assetIndex, setAssetIndex] = useState(-1);
 
   const updateNote = useStore((state) => state.updateNote);
   const deleteNote = useStore((state) => state.deleteNote);
   const getNote = useStore((state) => state.getNote);
   const toggleNotePin = useStore((state) => state.toggleNotePin);
   const addEmptyNote = useStore((state) => state.addEmptyNote);
-  const addImages = useStore((state) => state.addImages);
-
-  const imagesUris: ImageSource[] = images.map((id) => ({
-    uri: FileSystem.documentDirectory + id,
-  }));
+  const addAssets = useStore((state) => state.addAssets);
 
   const headerRight = () => (
     <View
@@ -102,17 +98,16 @@ export const NoteScreen: React.FC<Props> = ({
     });
 
     if (assets) {
-      const uris = assets.map((asset) => asset.uri);
-      addImages(id, uris);
+      const newAssets: Asset[] = assets.map((asset) => ({
+        id: nanoid(10),
+        uri: asset.uri,
+        height: asset.height,
+        width: asset.width,
+      }));
 
-      const ids: string[] = [];
-      uris.map((uri) => {
-        const cut = uri.lastIndexOf('/');
-        const id = uri.substring(cut + 1);
-        ids.push(id);
-      });
+      addAssets(id, newAssets);
 
-      setImages((current) => [...ids, ...current]);
+      setAssets((current) => [...newAssets, ...current]);
     }
   };
 
@@ -123,17 +118,16 @@ export const NoteScreen: React.FC<Props> = ({
     });
 
     if (assets) {
-      const uris = assets.map((asset) => asset.uri);
-      addImages(id, uris);
+      const newAssets: Asset[] = assets.map((asset) => ({
+        id: nanoid(10),
+        uri: asset.uri,
+        height: asset.height,
+        width: asset.width,
+      }));
 
-      const ids: string[] = [];
-      uris.map((uri) => {
-        const cut = uri.lastIndexOf('/');
-        const id = uri.substring(cut + 1);
-        ids.push(id);
-      });
+      addAssets(id, newAssets);
 
-      setImages((current) => [...ids, ...current]);
+      setAssets((current) => [...newAssets, ...current]);
     }
   };
 
@@ -151,7 +145,7 @@ export const NoteScreen: React.FC<Props> = ({
       setTitle(note.title);
       setText(note.text);
       setIsPinned(note.isPinned);
-      setImages(note.images);
+      setAssets(note.assets);
     } else {
       const newNoteId = addEmptyNote();
 
@@ -168,18 +162,10 @@ export const NoteScreen: React.FC<Props> = ({
   }, [navigation, id, title, text]);
 
   return (
-    <View>
-      <View style={{ display: 'flex', flexDirection: 'row' }}>
-        {imagesUris.map((source, index) => (
-          <Image
-            key={index}
-            source={source}
-            contentFit="contain"
-            style={{ minWidth: 100, minHeight: 100 }}
-            onTouchEnd={() => setImageIndex(index)}
-          />
-        ))}
-      </View>
+    <ScrollView>
+      {assets[0] && (
+        <NoteAsset asset={assets[0]} onPress={() => setAssetIndex(0)} />
+      )}
 
       <View padding-15>
         <TextField
@@ -196,10 +182,6 @@ export const NoteScreen: React.FC<Props> = ({
           text70
           multiline
         />
-
-        {images.map((x, i) => (
-          <Text key={i}>{x}</Text>
-        ))}
 
         <ActionSheet
           visible={actionSheetIndex}
@@ -235,12 +217,12 @@ export const NoteScreen: React.FC<Props> = ({
         />
 
         <ImageView
-          images={imagesUris}
-          imageIndex={imageIndex}
-          visible={imageIndex > -1}
-          onRequestClose={() => setImageIndex(-1)}
+          images={assets}
+          imageIndex={assetIndex}
+          visible={assetIndex > -1}
+          onRequestClose={() => setAssetIndex(-1)}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 };

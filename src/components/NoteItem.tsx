@@ -1,5 +1,4 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import * as FileSystem from 'expo-file-system';
 import React from 'react';
 import { Card, Colors, Text, View } from 'react-native-ui-lib';
 import { useStore } from '../hooks/useStore';
@@ -16,10 +15,6 @@ const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
   const date =
     sortNotesBy === 'CREATION_DATE' ? note.createdAt : note.updatedAt;
   const dateString = new Date(date).toLocaleString();
-  const image =
-    note.images[0] !== undefined
-      ? FileSystem.documentDirectory + note.images[0]
-      : '';
 
   return (
     <Card
@@ -64,9 +59,9 @@ const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
           </Text>
         </View>
 
-        {image && (
+        {note.assets[0] && (
           <Card.Section
-            imageSource={{ uri: image }}
+            imageSource={{ uri: note.assets[0].uri }}
             imageStyle={{ width: 128, flex: 1 }}
             style={{
               borderTopLeftRadius: 0,

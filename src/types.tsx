@@ -1,3 +1,10 @@
+export interface Asset {
+  id: string;
+  uri: string;
+  width: number;
+  height: number;
+}
+
 export interface Note {
   id: string;
   title: string;
@@ -6,7 +13,7 @@ export interface Note {
   createdAt: number;
   isPinned: boolean;
   updatedAt: number;
-  images: string[];
+  assets: Asset[];
 }
 
 export type NativeStackParams = {
