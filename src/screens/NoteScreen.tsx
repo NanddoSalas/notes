@@ -181,6 +181,8 @@ export const NoteScreen: React.FC<Props> = ({
           onChangeText={handleChangeText}
           text70
           multiline
+          numberOfLines={8}
+          textAlignVertical="top"
         />
 
         <ActionSheet
