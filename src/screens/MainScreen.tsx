@@ -24,19 +24,21 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
     if (selectedNotesCount === 1) {
       navigation.setOptions({
         headerTitle: '1 Selected Note',
+        headerTitleAlign: 'center',
         headerLeft: () => <CloseButton onPress={deselectNotes} />,
         headerRight: () => <MoreVertButton onPress={toggleActionSheet} />,
       });
     } else if (selectedNotesCount > 1) {
       navigation.setOptions({
         headerTitle: `${selectedNotesCount} Selected Notes`,
+        headerTitleAlign: 'center',
         headerLeft: () => <CloseButton onPress={deselectNotes} />,
         headerRight: () => <MoreVertButton onPress={toggleActionSheet} />,
       });
     } else {
       navigation.setOptions({
-        headerTitle: '',
-        headerTitleAlign: 'center',
+        headerTitle: 'Notes',
+        headerTitleAlign: 'left',
         headerLeft: undefined,
         headerRight: () => (
           <SettingsButton onPress={() => navigation.navigate('Settings')} />
