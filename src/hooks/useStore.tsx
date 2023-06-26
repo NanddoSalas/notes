@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system';
 import { nanoid } from 'nanoid';
+import { Share } from 'react-native';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { Asset, Note, SortNotesBy } from '../types';
@@ -27,6 +28,7 @@ type Actions = {
   toggleNotePin: (noteId: string) => void;
   addAssets: (noteId: string, assets: Asset[]) => void;
   addEmptyNote: () => string;
+  shareNote: (noteId: string) => void;
 };
 
 const initialState: State = {
@@ -208,6 +210,14 @@ export const useStore = create<State & Actions>()(
         }));
 
         return newNoteId;
+      },
+
+      shareNote: (noteId: string) => {
+        const note = get().getNote(noteId);
+
+        if (note) {
+          Share.share({ message: note.text });
+        }
       },
     }),
 
