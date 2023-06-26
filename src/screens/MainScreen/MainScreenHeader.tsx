@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Text, View } from 'react-native';
 import { ActionsSheet } from '../../components/ActionsSheet';
 import { BaseHeader } from '../../components/BaseHeader';
+import { HeaderIconButton } from '../../components/HeaderIconButton';
 import { useStore } from '../../hooks/useStore';
 import { NativeStackParams } from '../../types';
 
@@ -16,6 +17,8 @@ export const MainScreenHeader = () => {
     useNavigation<NativeStackNavigationProp<NativeStackParams, 'Main'>>();
 
   const toggleActionSheet = () => setIsVisible((current) => !current);
+
+  const handleSettingsPress = () => navigation.navigate('Settings');
 
   return (
     <>
@@ -29,10 +32,9 @@ export const MainScreenHeader = () => {
               alignItems: 'center',
             }}
           >
-            <MaterialIcons
-              name="close"
-              size={24}
-              color="black"
+            <HeaderIconButton
+              icon={<MaterialIcons name="close" size={24} color="black" />}
+              label="Close"
               onPress={deselectNotes}
             />
 
@@ -42,10 +44,9 @@ export const MainScreenHeader = () => {
                 : `${selectedNotesCount} Selected Notes`}
             </Text>
 
-            <MaterialIcons
-              name="more-vert"
-              size={24}
-              color="black"
+            <HeaderIconButton
+              icon={<MaterialIcons name="more-vert" size={24} color="black" />}
+              label="More options"
               onPress={toggleActionSheet}
             />
           </View>
@@ -60,11 +61,10 @@ export const MainScreenHeader = () => {
           >
             <Text>Notes</Text>
 
-            <MaterialIcons
-              name="settings"
-              size={24}
-              color="black"
-              onPress={() => navigation.navigate('Settings')}
+            <HeaderIconButton
+              icon={<MaterialIcons name="settings" size={24} color="black" />}
+              label="Settings"
+              onPress={handleSettingsPress}
             />
           </View>
         )}

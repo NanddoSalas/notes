@@ -11,6 +11,7 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { ActionSheet } from 'react-native-ui-lib';
 import { BaseHeader } from '../../components/BaseHeader';
+import { HeaderIconButton } from '../../components/HeaderIconButton';
 import { useStore } from '../../hooks/useStore';
 import { Asset, NativeStackParams } from '../../types';
 
@@ -90,35 +91,38 @@ export const NoteScreenHeader: React.FC<Props> = ({ noteId, pinned }) => {
             alignItems: 'center',
           }}
         >
-          <MaterialIcons
-            name="arrow-back"
-            size={24}
-            color="black"
+          <HeaderIconButton
+            icon={<MaterialIcons name="arrow-back" size={24} color="black" />}
+            label="Go back"
             onPress={handleBackPress}
           />
 
           <View style={{ display: 'flex', flexDirection: 'row' }}>
-            <MaterialCommunityIcons
-              name={isPinned ? 'pin' : 'pin-outline'}
-              size={24}
-              color="black"
-              style={{ marginLeft: 15 }}
+            <HeaderIconButton
+              icon={
+                <MaterialCommunityIcons
+                  name={isPinned ? 'pin' : 'pin-outline'}
+                  size={24}
+                  color="black"
+                />
+              }
+              label={isPinned ? 'Unpin' : 'Pin'}
               onPress={handlePinPress}
             />
 
-            <Octicons
-              name="diff-added"
-              size={24}
-              color="black"
-              style={{ marginLeft: 15 }}
+            <View style={{ width: 15 }} />
+
+            <HeaderIconButton
+              icon={<Octicons name="diff-added" size={24} color="black" />}
+              label="Add assets"
               onPress={handleAddBoxPress}
             />
 
-            <MaterialIcons
-              name="more-vert"
-              size={24}
-              color="black"
-              style={{ marginLeft: 15 }}
+            <View style={{ width: 15 }} />
+
+            <HeaderIconButton
+              icon={<MaterialIcons name="more-vert" size={24} color="black" />}
+              label="More options"
               onPress={handleMorePress}
             />
           </View>
