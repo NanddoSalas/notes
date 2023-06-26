@@ -8,7 +8,7 @@ type Props = NativeStackScreenProps<NativeStackParams, 'Main'>;
 
 export const MainScreen: React.FC<Props> = ({}) => {
   return (
-    <View>
+    <View style={{ display: 'flex', flex: 1 }}>
       <NoteList />
 
       <Fab />
