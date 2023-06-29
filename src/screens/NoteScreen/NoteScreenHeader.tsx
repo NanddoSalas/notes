@@ -129,7 +129,7 @@ export const NoteScreenHeader: React.FC<Props> = ({ noteId, pinned }) => {
                   color="black"
                 />
               }
-              label=""
+              label="Add image"
               onPress={handleAddImage}
             />
 
