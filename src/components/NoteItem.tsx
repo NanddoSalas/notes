@@ -45,11 +45,16 @@ const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
             </Text>
           )}
 
-          {note.text && (
-            <Text text70 $textDefault>
-              {note.text.split('\n')[0]}
-            </Text>
-          )}
+          {note.text &&
+            note.text.split('\n').map((row, index, rows) => {
+              if (index > 9) return undefined;
+
+              if (index === 9 && rows.length > 9) {
+                return <Text key={index}>{row}...</Text>;
+              }
+
+              return <Text key={index}>{row}</Text>;
+            })}
         </View>
       ) : undefined}
     </Card>
