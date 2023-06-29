@@ -1,22 +1,18 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useState } from 'react';
 import { Text, View } from 'react-native';
-import { ActionsSheet } from '../../components/ActionsSheet';
 import { BaseHeader } from '../../components/BaseHeader';
 import { HeaderIconButton } from '../../components/HeaderIconButton';
 import { useStore } from '../../hooks/useStore';
 import { NativeStackParams } from '../../types';
 
 export const MainScreenHeader = () => {
-  const [isVisible, setIsVisible] = useState(false);
   const selectedNotesCount = useStore((state) => state.selectedNotesCount);
   const deselectNotes = useStore((state) => state.deselectNotes);
+  const deleteSelectedNotes = useStore((state) => state.deleteSelectedNotes);
   const navigation =
     useNavigation<NativeStackNavigationProp<NativeStackParams, 'Main'>>();
-
-  const toggleActionSheet = () => setIsVisible((current) => !current);
 
   const handleSettingsPress = () => navigation.navigate('Settings');
 
@@ -45,9 +41,9 @@ export const MainScreenHeader = () => {
             </Text>
 
             <HeaderIconButton
-              icon={<MaterialIcons name="more-vert" size={24} color="black" />}
-              label="More options"
-              onPress={toggleActionSheet}
+              icon={<MaterialIcons name="delete" size={24} color="black" />}
+              label="Delete selected notes"
+              onPress={deleteSelectedNotes}
             />
           </View>
         ) : (
@@ -69,8 +65,6 @@ export const MainScreenHeader = () => {
           </View>
         )}
       </BaseHeader>
-
-      <ActionsSheet visible={isVisible} onDismiss={toggleActionSheet} />
     </>
   );
 };

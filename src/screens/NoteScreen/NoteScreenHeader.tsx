@@ -1,15 +1,10 @@
-import {
-  MaterialCommunityIcons,
-  MaterialIcons,
-  Octicons,
-} from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import * as ImagePicker from 'expo-image-picker';
 import { nanoid } from 'nanoid';
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { ActionSheet } from 'react-native-ui-lib';
 import { BaseHeader } from '../../components/BaseHeader';
 import { HeaderIconButton } from '../../components/HeaderIconButton';
 import { useStore } from '../../hooks/useStore';
@@ -21,7 +16,6 @@ interface Props {
 }
 
 export const NoteScreenHeader: React.FC<Props> = ({ noteId, pinned }) => {
-  const [actionSheetIndex, setActionSheetIndex] = useState(0);
   const [isPinned, setIsPinned] = useState(pinned);
   const deleteNote = useStore((state) => state.deleteNote);
   const addAssets = useStore((state) => state.addAssets);
@@ -76,9 +70,14 @@ export const NoteScreenHeader: React.FC<Props> = ({ noteId, pinned }) => {
     toggleNotePin(noteId);
   };
 
-  const handleAddBoxPress = () => setActionSheetIndex(2);
+  const handleShareNote = () => {
+    shareNote(noteId);
+  };
 
-  const handleMorePress = () => setActionSheetIndex(1);
+  const handleDeleteNote = () => {
+    deleteNote(noteId);
+    navigation.goBack();
+  };
 
   return (
     <>
@@ -113,54 +112,47 @@ export const NoteScreenHeader: React.FC<Props> = ({ noteId, pinned }) => {
             <View style={{ width: 15 }} />
 
             <HeaderIconButton
-              icon={<Octicons name="diff-added" size={24} color="black" />}
-              label="Add assets"
-              onPress={handleAddBoxPress}
+              icon={
+                <MaterialIcons name="add-a-photo" size={24} color="black" />
+              }
+              label="Take photo"
+              onPress={handleTakePhoto}
             />
 
             <View style={{ width: 15 }} />
 
             <HeaderIconButton
-              icon={<MaterialIcons name="more-vert" size={24} color="black" />}
-              label="More options"
-              onPress={handleMorePress}
+              icon={
+                <MaterialIcons
+                  name="add-photo-alternate"
+                  size={24}
+                  color="black"
+                />
+              }
+              label=""
+              onPress={handleAddImage}
+            />
+
+            <View style={{ width: 15 }} />
+
+            <HeaderIconButton
+              icon={
+                <MaterialCommunityIcons name="share" size={24} color="black" />
+              }
+              label="Share note"
+              onPress={handleShareNote}
+            />
+
+            <View style={{ width: 15 }} />
+
+            <HeaderIconButton
+              icon={<MaterialIcons name="delete" size={24} color="black" />}
+              label="Delete"
+              onPress={handleDeleteNote}
             />
           </View>
         </View>
       </BaseHeader>
-
-      <ActionSheet
-        visible={actionSheetIndex}
-        onDismiss={() => setActionSheetIndex(0)}
-        options={
-          actionSheetIndex === 1
-            ? [
-                {
-                  label: 'Share',
-                  onPress: () => {
-                    shareNote(noteId);
-                  },
-                },
-                {
-                  label: 'Delete',
-                  onPress: () => {
-                    deleteNote(noteId);
-                    navigation.goBack();
-                  },
-                },
-              ]
-            : [
-                {
-                  label: 'Take photo',
-                  onPress: handleTakePhoto,
-                },
-                {
-                  label: 'Add image',
-                  onPress: handleAddImage,
-                },
-              ]
-        }
-      />
     </>
   );
 };
