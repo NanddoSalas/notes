@@ -1,8 +1,9 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import ImageView from 'react-native-image-viewing';
-import { TextField, View } from 'react-native-ui-lib';
+import { TextField } from 'react-native-ui-lib';
 import { NoteAsset } from '../../components/NoteAsset';
 import { useStore } from '../../hooks/useStore';
 import { Asset, NativeStackParams } from '../../types';
@@ -73,7 +74,7 @@ export const NoteScreen: React.FC<Props> = ({
         <NoteAsset asset={assets[0]} onPress={() => setAssetIndex(0)} />
       )}
 
-      <View padding-15>
+      <View style={{ padding: 15 }}>
         <TextField
           placeholder="Title"
           value={title}

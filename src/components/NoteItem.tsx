@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import { useWindowDimensions } from 'react-native';
-import { Card, Text, View } from 'react-native-ui-lib';
+import { View, useWindowDimensions } from 'react-native';
+import { Card, Text } from 'react-native-ui-lib';
 import { Note } from '../types';
 
 interface Props {
@@ -38,7 +38,7 @@ const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
       )}
 
       {title || text ? (
-        <View padding-20>
+        <View style={{ padding: 20 }}>
           {note.title && (
             <Text text40 $textDefault>
               {note.title}
