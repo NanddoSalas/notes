@@ -13,6 +13,7 @@ export const BaseHeader: React.FC<Props> = ({ children }) => {
       style={{
         paddingTop: insets.top,
         backgroundColor: 'white',
+        elevation: 4,
       }}
     >
       <View
