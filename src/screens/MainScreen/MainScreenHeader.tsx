@@ -38,7 +38,7 @@ export const MainScreenHeader = () => {
               onPress={deselectNotes}
             />
 
-            <Text>
+            <Text style={{ fontSize: 20, fontWeight: '600' }}>
               {selectedNotesCount === 1
                 ? '1 Selected Note'
                 : `${selectedNotesCount} Selected Notes`}
@@ -59,7 +59,7 @@ export const MainScreenHeader = () => {
               alignItems: 'center',
             }}
           >
-            <Text>Notes</Text>
+            <Text style={{ fontSize: 20, fontWeight: '600' }}>Notes</Text>
 
             <HeaderIconButton
               icon={<MaterialIcons name="settings" size={24} color="black" />}
