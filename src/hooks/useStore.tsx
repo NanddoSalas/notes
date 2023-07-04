@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system';
 import { nanoid } from 'nanoid';
-import { Share } from 'react-native';
+import { Share, ToastAndroid } from 'react-native';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { Asset, Note, SortNotesBy } from '../types';
@@ -29,6 +29,7 @@ type Actions = {
   addAssets: (noteId: string, assets: Asset[]) => void;
   addEmptyNote: () => string;
   shareNote: (noteId: string) => void;
+  discardEmptyNote: (noteId: string) => void;
 };
 
 const initialState: State = {
@@ -218,6 +219,12 @@ export const useStore = create<State & Actions>()(
         if (note) {
           Share.share({ message: note.text });
         }
+      },
+
+      discardEmptyNote: (noteId) => {
+        get().deleteNote(noteId);
+
+        ToastAndroid.show('Empty note discarded', ToastAndroid.SHORT);
       },
     }),
 
