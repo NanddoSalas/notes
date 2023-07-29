@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import ImageView from 'react-native-image-viewing';
 import { TextField } from 'react-native-ui-lib';
-import { NoteAsset } from '../../components/NoteAsset';
+import { AssetsGrid } from '../../components/AssetsGrid';
 import { useStore } from '../../hooks/useStore';
 import { Asset, NativeStackParams } from '../../types';
 import { NoteScreenHeader } from './NoteScreenHeader';
@@ -70,9 +70,7 @@ export const NoteScreen: React.FC<Props> = ({
 
   return (
     <ScrollView>
-      {assets[0] && (
-        <NoteAsset asset={assets[0]} onPress={() => setAssetIndex(0)} />
-      )}
+      <AssetsGrid assets={assets} onPress={(index) => setAssetIndex(index)} />
 
       <View style={{ padding: 15 }}>
         <TextField
