@@ -17,7 +17,7 @@ export const NoteList = () => {
   const notes = useStore((state) => state.notes);
   const handleSelection = useStore((state) => state.handleSelection);
   const selectedNotesCount = useStore((state) => state.selectedNotesCount);
-  console.log(notes);
+  // console.log(notes);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<NativeStackParams, 'Main'>>();
