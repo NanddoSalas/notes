@@ -16,7 +16,7 @@ const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
   const isFocused = useIsFocused();
   const discardEmptyNote = useStore((state) => state.discardEmptyNote);
   const cardWidth = width - 30;
-  const { title, text } = note;
+  const { id, title, text, assets, isSelected } = note;
 
   const imageHeight = useMemo(() => {
     const asset = note.assets[0];
@@ -28,49 +28,49 @@ const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
 
   useEffect(() => {
     if (!title && !text) {
-      if (note.assets.length === 0 && isFocused) {
+      if (assets.length === 0 && isFocused) {
         discardEmptyNote(note.id);
       }
     }
   }, [note, isFocused]);
 
+  if (!title && !text && assets.length === 0) return <View />;
+
   return (
     <Card
-      key={note.id}
+      key={id}
       style={{ marginBottom: 15 }}
-      selected={note.isSelected}
-      onPress={() => onPress(note.id)}
-      onLongPress={() => onLongPress(note.id)}
+      selected={isSelected}
+      onPress={() => onPress(id)}
+      onLongPress={() => onLongPress(id)}
     >
-      {note.assets[0] && (
+      {assets[0] && (
         <Card.Section
-          imageSource={{ uri: note.assets[0].uri }}
+          imageSource={{ uri: assets[0].uri }}
           imageStyle={{ height: imageHeight }}
         />
       )}
 
-      <View style={{ padding: 20 }}>
-        {title || text ? (
-          <>
-            {note.title && (
-              <Text text40 $textDefault>
-                {note.title}
-              </Text>
-            )}
+      {title || text ? (
+        <View style={{ padding: 20 }}>
+          {title && (
+            <Text text40 $textDefault>
+              {title}
+            </Text>
+          )}
 
-            {note.text &&
-              note.text.split('\n').map((row, index, rows) => {
-                if (index > 9) return undefined;
+          {text &&
+            text.split('\n').map((row, index, rows) => {
+              if (index > 9) return undefined;
 
-                if (index === 9 && rows.length > 9) {
-                  return <Text key={index}>{row}...</Text>;
-                }
+              if (index === 9 && rows.length > 9) {
+                return <Text key={index}>{row}...</Text>;
+              }
 
-                return <Text key={index}>{row}</Text>;
-              })}
-          </>
-        ) : undefined}
-      </View>
+              return <Text key={index}>{row}</Text>;
+            })}
+        </View>
+      ) : undefined}
     </Card>
   );
 };
