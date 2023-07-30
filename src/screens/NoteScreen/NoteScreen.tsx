@@ -35,6 +35,10 @@ export const NoteScreen: React.FC<Props> = ({
     setText(value);
   };
 
+  const handleNewAssets = (assets: Asset[]) => {
+    setAssets((current) => [...assets, ...current]);
+  };
+
   useEffect(() => {
     const note = getNote(noteId);
 
@@ -46,7 +50,11 @@ export const NoteScreen: React.FC<Props> = ({
 
       navigation.setOptions({
         header: () => (
-          <NoteScreenHeader noteId={note.id} pinned={note.isPinned} />
+          <NoteScreenHeader
+            noteId={note.id}
+            pinned={note.isPinned}
+            onNewAssets={handleNewAssets}
+          />
         ),
       });
     } else {
@@ -55,7 +63,13 @@ export const NoteScreen: React.FC<Props> = ({
       setId(newNoteId);
 
       navigation.setOptions({
-        header: () => <NoteScreenHeader noteId={newNoteId} pinned={false} />,
+        header: () => (
+          <NoteScreenHeader
+            noteId={newNoteId}
+            pinned={false}
+            onNewAssets={handleNewAssets}
+          />
+        ),
       });
     }
   }, []);

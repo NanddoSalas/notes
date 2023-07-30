@@ -13,9 +13,14 @@ import { Asset, NativeStackParams } from '../../types';
 interface Props {
   noteId: string;
   pinned: boolean;
+  onNewAssets: (assets: Asset[]) => void;
 }
 
-export const NoteScreenHeader: React.FC<Props> = ({ noteId, pinned }) => {
+export const NoteScreenHeader: React.FC<Props> = ({
+  noteId,
+  pinned,
+  onNewAssets,
+}) => {
   const [isPinned, setIsPinned] = useState(pinned);
   const deleteNote = useStore((state) => state.deleteNote);
   const addAssets = useStore((state) => state.addAssets);
@@ -39,7 +44,7 @@ export const NoteScreenHeader: React.FC<Props> = ({ noteId, pinned }) => {
 
       addAssets(noteId, newAssets);
 
-      // setAssets((current) => [...newAssets, ...current]);
+      onNewAssets(newAssets);
     }
   };
 
@@ -59,7 +64,7 @@ export const NoteScreenHeader: React.FC<Props> = ({ noteId, pinned }) => {
 
       addAssets(noteId, newAssets);
 
-      // setAssets((current) => [...newAssets, ...current]);
+      onNewAssets(newAssets);
     }
   };
 
