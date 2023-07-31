@@ -31,7 +31,7 @@ export const NoteScreenHeader: React.FC<Props> = ({
 
   const handleTakePhoto = async () => {
     const { assets } = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
     });
 
     if (assets) {
@@ -50,7 +50,7 @@ export const NoteScreenHeader: React.FC<Props> = ({
 
   const handleAddImage = async () => {
     const { assets } = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsMultipleSelection: true,
     });
 
