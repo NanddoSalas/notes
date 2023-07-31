@@ -30,6 +30,7 @@ type Actions = {
   addEmptyNote: () => string;
   shareNote: (noteId: string) => void;
   discardEmptyNote: (noteId: string) => void;
+  deleteAsset: (noteId: string, assetId: string) => void;
 };
 
 const initialState: State = {
@@ -225,6 +226,25 @@ export const useStore = create<State & Actions>()(
         get().deleteNote(noteId);
 
         ToastAndroid.show('Empty note discarded', ToastAndroid.SHORT);
+      },
+
+      deleteAsset: (noteId, assetId) => {
+        set((state) => ({
+          notes: state.notes.map((note) => {
+            if (note.id !== noteId) return note;
+
+            return {
+              ...note,
+              assets: note.assets.filter((asset) => {
+                if (asset.id !== assetId) return true;
+
+                FileSystem.deleteAsync(asset.uri, { idempotent: true });
+
+                return false;
+              }),
+            };
+          }),
+        }));
       },
     }),
 

@@ -7,6 +7,7 @@ import { TextField } from 'react-native-ui-lib';
 import { AssetsGrid } from '../../components/AssetsGrid';
 import { useStore } from '../../hooks/useStore';
 import { Asset, NativeStackParams } from '../../types';
+import { ImageViewHeader } from './ImageViewHeader';
 import { NoteScreenHeader } from './NoteScreenHeader';
 
 type Props = NativeStackScreenProps<NativeStackParams, 'Note'>;
@@ -26,6 +27,7 @@ export const NoteScreen: React.FC<Props> = ({
   const updateNote = useStore((state) => state.updateNote);
   const getNote = useStore((state) => state.getNote);
   const addEmptyNote = useStore((state) => state.addEmptyNote);
+  const deleteAsset = useStore((state) => state.deleteAsset);
 
   const handleChangeTitle = (value: string) => {
     setTitle(value);
@@ -37,6 +39,20 @@ export const NoteScreen: React.FC<Props> = ({
 
   const handleNewAssets = (assets: Asset[]) => {
     setAssets((current) => [...assets, ...current]);
+  };
+
+  const handleImageViewClose = () => setAssetIndex(-1);
+
+  const handleAssetDelete = (index: number) => {
+    setAssetIndex(-1);
+    deleteAsset(noteId, assets[index].id);
+    setAssets((current) =>
+      current.filter((asset, i) => {
+        if (i !== index) return true;
+
+        return false;
+      }),
+    );
   };
 
   useEffect(() => {
@@ -109,7 +125,14 @@ export const NoteScreen: React.FC<Props> = ({
         images={assets}
         imageIndex={assetIndex}
         visible={assetIndex > -1}
-        onRequestClose={() => setAssetIndex(-1)}
+        onRequestClose={handleImageViewClose}
+        HeaderComponent={({ imageIndex }) => (
+          <ImageViewHeader
+            imageIndex={imageIndex}
+            onGoBack={handleImageViewClose}
+            onDelete={handleAssetDelete}
+          />
+        )}
       />
     </ScrollView>
   );
