@@ -2,12 +2,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import * as Haptics from 'expo-haptics';
-import Animated, {
-  FadeIn,
-  FadeOut,
-  Layout,
-  SequencedTransition,
-} from 'react-native-reanimated';
+import Animated, { FadeIn } from 'react-native-reanimated';
 import { Colors, Text } from 'react-native-ui-lib';
 import { useStore } from '../hooks/useStore';
 import { NativeStackParams } from '../types';
@@ -17,7 +12,10 @@ export const NoteList = () => {
   const notes = useStore((state) => state.notes);
   const handleSelection = useStore((state) => state.handleSelection);
   const selectedNotesCount = useStore((state) => state.selectedNotesCount);
-  // console.log(notes);
+  const NOTES = [
+    ...notes.filter(({ isPinned }) => isPinned),
+    ...notes.filter(({ isPinned }) => !isPinned),
+  ];
 
   const navigation =
     useNavigation<NativeStackNavigationProp<NativeStackParams, 'Main'>>();
@@ -42,8 +40,6 @@ export const NoteList = () => {
         padding: 15,
         flexGrow: 1,
       }}
-      layout={Layout}
-      style={{}}
     >
       {notes.length === 0 && (
         <Animated.View
@@ -67,40 +63,14 @@ export const NoteList = () => {
         </Animated.View>
       )}
 
-      {notes
-        .filter(({ isPinned }) => isPinned)
-        .map((note) => (
-          <Animated.View
-            key={note.id}
-            entering={FadeIn}
-            exiting={FadeOut}
-            layout={SequencedTransition}
-            style={{ zIndex: 5 }}
-          >
-            <NoteItem
-              note={note}
-              onPress={handlePress}
-              onLongPress={handleLongPress}
-            />
-          </Animated.View>
-        ))}
-      {notes
-        .filter(({ isPinned }) => !isPinned)
-        .map((note) => (
-          <Animated.View
-            key={note.id}
-            entering={FadeIn}
-            exiting={FadeOut}
-            layout={SequencedTransition}
-            style={{ zIndex: 5 }}
-          >
-            <NoteItem
-              note={note}
-              onPress={handlePress}
-              onLongPress={handleLongPress}
-            />
-          </Animated.View>
-        ))}
+      {NOTES.map((note) => (
+        <NoteItem
+          key={note.id}
+          note={note}
+          onPress={handlePress}
+          onLongPress={handleLongPress}
+        />
+      ))}
     </Animated.ScrollView>
   );
 };

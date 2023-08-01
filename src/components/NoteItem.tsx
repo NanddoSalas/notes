@@ -1,6 +1,11 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useMemo } from 'react';
 import { View, useWindowDimensions } from 'react-native';
+import Animated, {
+  FadeIn,
+  FadeOut,
+  SequencedTransition,
+} from 'react-native-reanimated';
 import { Card, Text } from 'react-native-ui-lib';
 import { useStore } from '../hooks/useStore';
 import { Note } from '../types';
@@ -37,41 +42,47 @@ const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
   if (!title && !text && assets.length === 0) return <View />;
 
   return (
-    <Card
-      key={id}
-      style={{ marginBottom: 15 }}
-      selected={isSelected}
-      onPress={() => onPress(id)}
-      onLongPress={() => onLongPress(id)}
+    <Animated.View
+      entering={FadeIn}
+      exiting={FadeOut}
+      layout={SequencedTransition}
+      style={{ zIndex: 5 }}
     >
-      {assets[0] && (
-        <Card.Section
-          imageSource={{ uri: assets[0].uri }}
-          imageStyle={{ height: imageHeight }}
-        />
-      )}
+      <Card
+        style={{ marginBottom: 15 }}
+        selected={isSelected}
+        onPress={() => onPress(id)}
+        onLongPress={() => onLongPress(id)}
+      >
+        {assets[0] && (
+          <Card.Section
+            imageSource={{ uri: assets[0].uri }}
+            imageStyle={{ height: imageHeight }}
+          />
+        )}
 
-      {title || text ? (
-        <View style={{ padding: 20 }}>
-          {title && (
-            <Text text40 $textDefault>
-              {title}
-            </Text>
-          )}
+        {title || text ? (
+          <View style={{ padding: 20 }}>
+            {title && (
+              <Text text40 $textDefault>
+                {title}
+              </Text>
+            )}
 
-          {text &&
-            text.split('\n').map((row, index, rows) => {
-              if (index > 9) return undefined;
+            {text &&
+              text.split('\n').map((row, index, rows) => {
+                if (index > 9) return undefined;
 
-              if (index === 9 && rows.length > 9) {
-                return <Text key={index}>{row}...</Text>;
-              }
+                if (index === 9 && rows.length > 9) {
+                  return <Text key={index}>{row}...</Text>;
+                }
 
-              return <Text key={index}>{row}</Text>;
-            })}
-        </View>
-      ) : undefined}
-    </Card>
+                return <Text key={index}>{row}</Text>;
+              })}
+          </View>
+        ) : undefined}
+      </Card>
+    </Animated.View>
   );
 };
 
