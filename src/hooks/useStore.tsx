@@ -168,10 +168,11 @@ export const useStore = create<State & Actions>()(
           const id = asset.uri.substring(cut + 1);
           ids.push(id);
 
-          FileSystem.copyAsync({
-            from: asset.uri,
-            to: FileSystem.documentDirectory + id,
-          });
+          // todo: figure out if i need to move or copy the asset from its default place (cache directory) to document directory
+          // FileSystem.copyAsync({
+          //   from: asset.uri,
+          //   to: FileSystem.documentDirectory + id,
+          // });
         });
 
         set((state) => ({
@@ -182,7 +183,7 @@ export const useStore = create<State & Actions>()(
                   assets: [
                     ...assets.map((asset, index) => ({
                       ...asset,
-                      uri: FileSystem.documentDirectory + ids[index],
+                      // uri: FileSystem.documentDirectory + ids[index],
                     })),
                     ...note.assets,
                   ],

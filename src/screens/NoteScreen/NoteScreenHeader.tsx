@@ -30,6 +30,8 @@ export const NoteScreenHeader: React.FC<Props> = ({
     useNavigation<NativeStackNavigationProp<NativeStackParams, 'Note'>>();
 
   const handleTakePhoto = async () => {
+    // todo: add loading screen when adding new assets
+    // todo: optimize assets
     const { assets } = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
     });
@@ -49,6 +51,8 @@ export const NoteScreenHeader: React.FC<Props> = ({
   };
 
   const handleAddImage = async () => {
+    // todo: add loading screen when adding new assets
+    // todo: optimize assets
     const { assets } = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsMultipleSelection: true,
