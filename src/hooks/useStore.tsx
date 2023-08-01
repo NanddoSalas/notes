@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as FileSystem from 'expo-file-system';
 import { nanoid } from 'nanoid';
 import { Share, ToastAndroid } from 'react-native';
 import { create } from 'zustand';
@@ -69,9 +68,10 @@ export const useStore = create<State & Actions>()(
           notes: state.notes.filter((item) => {
             if (item.id !== noteId) return true;
 
-            item.assets.map((asset) => {
-              FileSystem.deleteAsync(asset.uri, { idempotent: true });
-            });
+            // ImageManipulator cached asset isn't deletable
+            // item.assets.map((asset) => {
+            //   FileSystem.deleteAsync(asset.uri, { idempotent: true });
+            // });
 
             return false;
           }),
@@ -239,7 +239,8 @@ export const useStore = create<State & Actions>()(
               assets: note.assets.filter((asset) => {
                 if (asset.id !== assetId) return true;
 
-                FileSystem.deleteAsync(asset.uri, { idempotent: true });
+                // ImageManipulator cached asset isn't deletable
+                // FileSystem.deleteAsync(asset.uri, { idempotent: true });
 
                 return false;
               }),

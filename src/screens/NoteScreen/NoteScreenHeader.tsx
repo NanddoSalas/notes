@@ -1,10 +1,11 @@
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { manipulateAsync } from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
 import { nanoid } from 'nanoid';
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { View, useWindowDimensions } from 'react-native';
 import { BaseHeader } from '../../components/BaseHeader';
 import { HeaderIconButton } from '../../components/HeaderIconButton';
 import { useStore } from '../../hooks/useStore';
@@ -26,49 +27,68 @@ export const NoteScreenHeader: React.FC<Props> = ({
   const addAssets = useStore((state) => state.addAssets);
   const shareNote = useStore((state) => state.shareNote);
   const toggleNotePin = useStore((state) => state.toggleNotePin);
+  const dimensions = useWindowDimensions();
   const navigation =
     useNavigation<NativeStackNavigationProp<NativeStackParams, 'Note'>>();
 
+  const handleNewAssets = async (assets: ImagePicker.ImagePickerAsset[]) => {
+    const newAssets: Asset[] = [];
+    for (const asset of assets) {
+      const optimizedAsset = await manipulateAsync(
+        asset.uri,
+        [
+          {
+            resize: {
+              height:
+                asset.height >= asset.width ? dimensions.height : undefined,
+              width: asset.width > asset.height ? dimensions.width : undefined,
+            },
+          },
+        ],
+        { compress: 1 },
+      );
+
+      newAssets.push({
+        id: nanoid(6),
+        width: optimizedAsset.width,
+        height: optimizedAsset.height,
+        uri: optimizedAsset.uri,
+      });
+    }
+
+    // const newAssets: Asset[] = assets.map((asset) => ({
+    //   id: nanoid(10),
+    //   uri: asset.uri,
+    //   height: asset.height,
+    //   width: asset.width,
+    // }));
+
+    addAssets(noteId, newAssets);
+
+    onNewAssets(newAssets);
+  };
+
   const handleTakePhoto = async () => {
     // todo: add loading screen when adding new assets
-    // todo: optimize assets
     const { assets } = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
     });
 
     if (assets) {
-      const newAssets: Asset[] = assets.map((asset) => ({
-        id: nanoid(10),
-        uri: asset.uri,
-        height: asset.height,
-        width: asset.width,
-      }));
-
-      addAssets(noteId, newAssets);
-
-      onNewAssets(newAssets);
+      handleNewAssets(assets);
     }
   };
 
   const handleAddImage = async () => {
     // todo: add loading screen when adding new assets
-    // todo: optimize assets
     const { assets } = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsMultipleSelection: true,
+      selectionLimit: 5,
     });
 
     if (assets) {
-      const newAssets: Asset[] = assets.map((asset) => ({
-        id: nanoid(10),
-        uri: asset.uri,
-        height: asset.height,
-        width: asset.width,
-      }));
-
-      addAssets(noteId, newAssets);
-
-      onNewAssets(newAssets);
+      handleNewAssets(assets);
     }
   };
 
