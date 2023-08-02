@@ -12,6 +12,7 @@ export const NoteList = () => {
   const notes = useStore((state) => state.notes);
   const handleSelection = useStore((state) => state.handleSelection);
   const selectedNotesCount = useStore((state) => state.selectedNotesCount);
+  const presentation = useStore((state) => state.notesPresentation);
   const NOTES = [
     ...notes.filter(({ isPinned }) => isPinned),
     ...notes.filter(({ isPinned }) => !isPinned),
@@ -39,6 +40,9 @@ export const NoteList = () => {
       contentContainerStyle={{
         padding: 15,
         flexGrow: 1,
+        gap: 15,
+        flexWrap: 'wrap',
+        flexDirection: presentation === 'GRID' ? 'row' : 'column',
       }}
     >
       {notes.length === 0 && (

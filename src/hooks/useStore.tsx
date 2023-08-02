@@ -3,13 +3,14 @@ import { nanoid } from 'nanoid';
 import { Share, ToastAndroid } from 'react-native';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import { Asset, Note, SortNotesBy } from '../types';
+import { Asset, Note, NotesPresentation, SortNotesBy } from '../types';
 
 type State = {
   _hasHydrated: boolean;
   notes: Note[];
   selectedNotesCount: number;
   sortNotesBy: SortNotesBy;
+  notesPresentation: NotesPresentation;
 };
 
 type Actions = {
@@ -30,6 +31,7 @@ type Actions = {
   shareNote: (noteId: string) => void;
   discardEmptyNote: (noteId: string) => void;
   deleteAsset: (noteId: string, assetId: string) => void;
+  toggleNotesPresentation: () => void;
 };
 
 const initialState: State = {
@@ -37,6 +39,7 @@ const initialState: State = {
   notes: [],
   selectedNotesCount: 0,
   sortNotesBy: 'CREATION_DATE',
+  notesPresentation: 'GRID',
 };
 
 export const useStore = create<State & Actions>()(
@@ -246,6 +249,13 @@ export const useStore = create<State & Actions>()(
               }),
             };
           }),
+        }));
+      },
+
+      toggleNotesPresentation: () => {
+        set((state) => ({
+          notesPresentation:
+            state.notesPresentation === 'LIST' ? 'GRID' : 'LIST',
         }));
       },
     }),

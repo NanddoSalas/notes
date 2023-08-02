@@ -23,3 +23,5 @@ export type NativeStackParams = {
 };
 
 export type SortNotesBy = 'CREATION_DATE' | 'UPDATION_DATE';
+
+export type NotesPresentation = 'LIST' | 'GRID';
