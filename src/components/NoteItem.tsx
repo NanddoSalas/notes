@@ -1,8 +1,9 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import { Text, View, useWindowDimensions } from 'react-native';
 import Animated, { FadeIn, FadeOut, Layout } from 'react-native-reanimated';
-import { Card } from 'react-native-ui-lib';
+import { Card, Colors } from 'react-native-ui-lib';
 import { useStore } from '../hooks/useStore';
 import { Note } from '../types';
 
@@ -16,8 +17,13 @@ const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
   const { height, width } = useWindowDimensions();
   const isFocused = useIsFocused();
 
+  const sortNotesBy = useStore((state) => state.sortNotesBy);
   const discardEmptyNote = useStore((state) => state.discardEmptyNote);
   const presentation = useStore((store) => store.notesPresentation);
+
+  const date =
+    sortNotesBy === 'CREATION_DATE' ? note.createdAt : note.updatedAt;
+  const dateString = new Date(date).toLocaleTimeString();
   const { id, title, text, assets, isSelected } = note;
 
   useEffect(() => {
@@ -63,6 +69,30 @@ const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
               : assets.length > 0
               ? 'image note'
               : 'empty note'}
+          </Text>
+
+          <Text style={{}}>
+            {dateString}
+
+            {note.isPinned && (
+              <>
+                {' '}
+                <MaterialCommunityIcons
+                  name="pin"
+                  color={Colors.$iconPrimary}
+                />
+              </>
+            )}
+
+            {assets[0] && (
+              <>
+                {' '}
+                <MaterialCommunityIcons
+                  name="image"
+                  color={Colors.$iconPrimary}
+                />
+              </>
+            )}
           </Text>
         </View>
       </Card>
