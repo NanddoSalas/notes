@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { nanoid } from 'nanoid';
-import { Share, ToastAndroid } from 'react-native';
+import { ToastAndroid } from 'react-native';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { Asset, Note, NotesPresentation, SortNotesBy } from '../types';
@@ -28,7 +28,6 @@ type Actions = {
   toggleNotePin: (noteId: string) => void;
   addAssets: (noteId: string, assets: Asset[]) => void;
   addEmptyNote: () => string;
-  shareNote: (noteId: string) => void;
   discardEmptyNote: (noteId: string) => void;
   deleteAsset: (noteId: string, assetId: string) => void;
   toggleNotesPresentation: () => void;
@@ -216,14 +215,6 @@ export const useStore = create<State & Actions>()(
         }));
 
         return newNoteId;
-      },
-
-      shareNote: (noteId: string) => {
-        const note = get().getNote(noteId);
-
-        if (note) {
-          Share.share({ message: note.text });
-        }
       },
 
       discardEmptyNote: (noteId) => {

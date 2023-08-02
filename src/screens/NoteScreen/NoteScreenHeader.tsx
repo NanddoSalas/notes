@@ -25,7 +25,6 @@ export const NoteScreenHeader: React.FC<Props> = ({
   const [isPinned, setIsPinned] = useState(pinned);
   const deleteNote = useStore((state) => state.deleteNote);
   const addAssets = useStore((state) => state.addAssets);
-  const shareNote = useStore((state) => state.shareNote);
   const toggleNotePin = useStore((state) => state.toggleNotePin);
   const dimensions = useWindowDimensions();
   const navigation =
@@ -55,13 +54,6 @@ export const NoteScreenHeader: React.FC<Props> = ({
         uri: optimizedAsset.uri,
       });
     }
-
-    // const newAssets: Asset[] = assets.map((asset) => ({
-    //   id: nanoid(10),
-    //   uri: asset.uri,
-    //   height: asset.height,
-    //   width: asset.width,
-    // }));
 
     addAssets(noteId, newAssets);
 
@@ -99,10 +91,6 @@ export const NoteScreenHeader: React.FC<Props> = ({
     toggleNotePin(noteId);
   };
 
-  const handleShareNote = () => {
-    shareNote(noteId);
-  };
-
   const handleDeleteNote = () => {
     deleteNote(noteId);
     navigation.goBack();
@@ -125,7 +113,7 @@ export const NoteScreenHeader: React.FC<Props> = ({
             onPress={handleBackPress}
           />
 
-          <View style={{ display: 'flex', flexDirection: 'row' }}>
+          <View style={{ display: 'flex', flexDirection: 'row', gap: 15 }}>
             <HeaderIconButton
               icon={
                 <MaterialCommunityIcons
@@ -138,8 +126,6 @@ export const NoteScreenHeader: React.FC<Props> = ({
               onPress={handlePinPress}
             />
 
-            <View style={{ width: 15 }} />
-
             <HeaderIconButton
               icon={
                 <MaterialIcons name="add-a-photo" size={24} color="black" />
@@ -147,8 +133,6 @@ export const NoteScreenHeader: React.FC<Props> = ({
               label="Take photo"
               onPress={handleTakePhoto}
             />
-
-            <View style={{ width: 15 }} />
 
             <HeaderIconButton
               icon={
@@ -161,18 +145,6 @@ export const NoteScreenHeader: React.FC<Props> = ({
               label="Add image"
               onPress={handleAddImage}
             />
-
-            <View style={{ width: 15 }} />
-
-            <HeaderIconButton
-              icon={
-                <MaterialCommunityIcons name="share" size={24} color="black" />
-              }
-              label="Share note"
-              onPress={handleShareNote}
-            />
-
-            <View style={{ width: 15 }} />
 
             <HeaderIconButton
               icon={<MaterialIcons name="delete" size={24} color="black" />}
