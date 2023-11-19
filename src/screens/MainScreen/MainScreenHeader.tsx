@@ -1,4 +1,4 @@
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text, View } from 'react-native';
@@ -11,10 +11,12 @@ export const MainScreenHeader = () => {
   const selectedNotesCount = useStore((state) => state.selectedNotesCount);
   const deselectNotes = useStore((state) => state.deselectNotes);
   const deleteSelectedNotes = useStore((state) => state.deleteSelectedNotes);
+  const notesPresentation = useStore((state) => state.notesPresentation);
+  const toggleNotesPresentation = useStore(
+    (state) => state.toggleNotesPresentation,
+  );
   const navigation =
     useNavigation<NativeStackNavigationProp<NativeStackParams, 'Main'>>();
-
-  const handleSettingsPress = () => navigation.navigate('Settings');
 
   return (
     <>
@@ -58,9 +60,19 @@ export const MainScreenHeader = () => {
             <Text style={{ fontSize: 20, fontWeight: '600' }}>Notes</Text>
 
             <HeaderIconButton
-              icon={<MaterialIcons name="settings" size={24} color="black" />}
+              icon={
+                notesPresentation === 'LIST' ? (
+                  <MaterialIcons name="grid-view" size={24} color="black" />
+                ) : (
+                  <MaterialCommunityIcons
+                    name="view-agenda-outline"
+                    size={24}
+                    color="black"
+                  />
+                )
+              }
               label="Settings"
-              onPress={handleSettingsPress}
+              onPress={toggleNotesPresentation}
             />
           </View>
         )}

@@ -35,6 +35,29 @@ export const NoteList = () => {
     Haptics.selectionAsync();
   };
 
+  if (notes.length === 0)
+    return (
+      <Animated.View
+        style={{
+          display: 'flex',
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        entering={FadeIn}
+      >
+        <MaterialCommunityIcons
+          name="notebook-edit"
+          size={72}
+          color={Colors.$textPrimary}
+          style={{ opacity: 0.5 }}
+        />
+        <Text text60 color="gray">
+          No notes here yet
+        </Text>
+      </Animated.View>
+    );
+
   return (
     <Animated.ScrollView
       contentContainerStyle={{
@@ -45,31 +68,9 @@ export const NoteList = () => {
         flexDirection: presentation === 'GRID' ? 'row' : 'column',
       }}
     >
-      {notes.length === 0 && (
-        <Animated.View
-          style={{
-            display: 'flex',
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          entering={FadeIn}
-        >
-          <MaterialCommunityIcons
-            name="notebook-edit"
-            size={72}
-            color={Colors.$textPrimary}
-            style={{ opacity: 0.5 }}
-          />
-          <Text text60 color="gray">
-            No notes here yet
-          </Text>
-        </Animated.View>
-      )}
-
       {NOTES.map((note) => (
         <NoteItem
-          key={note.id}
+          key={presentation + note.id}
           note={note}
           onPress={handlePress}
           onLongPress={handleLongPress}

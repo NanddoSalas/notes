@@ -2,7 +2,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import { Text, View, useWindowDimensions } from 'react-native';
-import Animated, { FadeIn, FadeOut, Layout } from 'react-native-reanimated';
+import Animated, { Layout, ZoomIn, ZoomOut } from 'react-native-reanimated';
 import { Card, Colors } from 'react-native-ui-lib';
 import { useStore } from '../hooks/useStore';
 import { Note } from '../types';
@@ -38,8 +38,8 @@ const NoteItem: React.FC<Props> = ({ note, onPress, onLongPress }) => {
 
   return (
     <Animated.View
-      entering={FadeIn}
-      exiting={FadeOut}
+      entering={ZoomIn.delay(500)}
+      exiting={ZoomOut}
       layout={Layout.delay(100)}
       style={{
         zIndex: 5,
