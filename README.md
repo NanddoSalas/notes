@@ -2,12 +2,14 @@
 
 Mobile App that allows you to create simple notes build with Expo.
 
+<div>
 <img  src="./assets/screenshots/1.png" width="150"/>
 <img  src="./assets/screenshots/2.png" width="150"/>
 <img  src="./assets/screenshots/3.png" width="150"/>
 <img  src="./assets/screenshots/4.png" width="150"/>
 <img  src="./assets/screenshots/5.png" width="150"/>
 <img  src="./assets/screenshots/6.png" width="150"/>
+</div>
 
 ## Features
 
