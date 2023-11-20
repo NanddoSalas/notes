@@ -40,5 +40,6 @@
     "@types/react": "~18.0.14",
     "typescript": "^4.9.4"
   },
-  "private": true
+  "private": true,
+  "license": "MIT"
 }
