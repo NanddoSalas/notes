@@ -17,6 +17,10 @@ Mobile App that allows you to create simple notes build with Expo.
 - Pin notes
 - Add images to notes
 
+## Try Demo
+
+Download the APK [here](https://github.com/NanddoSalas/notes/releases/download/v.1.0.0/application-480a27b9-1a5d-4345-8e5c-93dbc8f81ed0.apk)
+
 ## Getting Started
 
 ### Prerequisites
