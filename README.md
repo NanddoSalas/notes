@@ -1,6 +1,6 @@
 # Notes App
 
-Mobile App that allows you to create simple notes build with Expo.
+Mobile app that helps you easily create notes, add images, and pin important notes for quick access. It's perfect for keeping track of all your ideas and important information.
 
 <div>
 <img  src="./assets/screenshots/1.png" width="150"/>
